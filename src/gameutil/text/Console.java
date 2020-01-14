@@ -642,6 +642,10 @@ public class Console {
 	public void scrollBottom() {
 		vertical.setValue(vertical.getModel().getMaximum()+vertical.getModel().getExtent());
 	}
+	
+	public void pause() {
+		keylistener.Pause();
+	}
 
 	public class TAdapter extends KeyAdapter {
 		private JTextArea field;
@@ -754,8 +758,10 @@ public class Console {
 		
 		public void keyPressed(KeyEvent e) {
 			if (paused) {
+				//unpause but don't interfere with reading actions
 				paused=false;
-			}else if (readingNumber && !reading) {
+				return;
+			} else if (readingNumber && !reading) {
 				String print = "";
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					readingNumber = false;
@@ -800,7 +806,7 @@ public class Console {
 		}
 
 		public void keyTyped(KeyEvent e) {
-			if (reading && !readingNumber) {
+			if (reading && !readingNumber && !paused) {
 				String print = "";
 				if (Character.getName(e.getKeyChar()).equals("LINE FEED (LF)")) {
 					// need this so that it doesn't print enter
@@ -913,7 +919,14 @@ public class Console {
 			//System.out.println("User input recieved");
 			return readCache;
 		}
-
+		
+		public void Pause() {
+			paused=true;
+			while (paused) {
+				doNothing();
+			}
+		}
+		
 		public String read() {
 			reading = true;
 			readCache = "";
@@ -1053,5 +1066,7 @@ public class Console {
 			reading=false;
 		}
 	}
+
+	
 	
 }

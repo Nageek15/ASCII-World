@@ -1,2 +1,4 @@
 eclipse.preferences.version=1
+encoding//src/ascii/map/Map.java=UTF-8
+encoding//src/ascii/sprites/Block.java=UTF-8
 encoding//src/gameutil/text/Console.java=UTF-8
