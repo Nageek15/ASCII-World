@@ -23,11 +23,11 @@ public class Level {
         //make a blank level
         sprites=new ArrayList<>();
         path="dat/NULL.lv";
-        sprites.add(new Block(new Point(0,6)));
-        sprites.add(new Block(new Point(1,6)));
-        sprites.add(new Block(new Point(2,6)));
-        sprites.add(new Block(new Point(-1,6)));
-        sprites.add(new Block(new Point(-2,6)));
+        sprites.add(new Block(new Point(0,4)));
+        sprites.add(new Block(new Point(1,4)));
+        sprites.add(new Block(new Point(2,4)));
+        sprites.add(new Block(new Point(-1,4)));
+        sprites.add(new Block(new Point(-2,4)));
     }
 
     public Level(String path){

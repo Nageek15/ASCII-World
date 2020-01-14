@@ -2,6 +2,8 @@ package ascii.sprites;
 
 import java.awt.Point;
 
+import ascii.App;
+
 public class Sprite {
 	protected final String name;
 	protected final char c;
@@ -139,6 +141,19 @@ public class Sprite {
 		
 	}
 	
+	public boolean attemptMove(Point pos) {
+		if (App.map.solidAt(pos)) {
+			return false;
+		} else {
+			this.pos=pos;
+			return true;
+		}
+	}
+	
+	public boolean isSolid() {
+		return solid;
+	}
+	
 	/**Should return the properties as a string that can be used to load the sprite
     *
     * @return
@@ -146,6 +161,14 @@ public class Sprite {
    public String getProps() {
 		return "String this.getClass().getTypeName() char - ";
 	}
+   
+   public int getX() {
+	   return pos.x;
+   }
+   
+   public int getY() {
+	   return pos.y;
+   }
 	
 	
 }

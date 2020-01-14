@@ -16,7 +16,7 @@ public class Map {
 
     ArrayList<Level> levels;
     //need to make these lists into hashtables for layers.
-    ArrayList<Sprite> screenSprites;
+    private ArrayList<Sprite> screenSprites;
     public static Level currentLevel;
     private static Camera camera;
     Point lastCameraLocation;
@@ -65,6 +65,7 @@ public class Map {
         currentLevel.update();
         camera.update();
         screenSprites=getSpritesOnScreen();
+        System.out.println(screenSprites.size());
     }
 
     public static Level getCurrentLevel(){
@@ -81,7 +82,7 @@ public class Map {
     	
     	int cameraX=camera.getArea().width/2;
     	int cameraY=camera.getArea().height/2;
-    	
+    	System.out.println(screenSprites.size());
     	for (Sprite s:screenSprites) {
     		int x=s.getPos().x-camera.location.x+cameraX;
     		int y=s.getPos().y-camera.location.y+cameraY;
@@ -90,7 +91,7 @@ public class Map {
     	
     	spritesToDraw.put(new Point(cameraX,cameraY),App.p);
     	
-    	for (int row=0;row<camera.getArea().height;row++) {
+    	for (int row=camera.getArea().height-1;row>=0;row--) {
     		for (int column=0;column<camera.getArea().width;column++) {
     			if (spritesToDraw.containsKey(new Point(column,row))) {
     				Console.s.print(spritesToDraw.get(new Point(column,row)).getChar());
@@ -114,13 +115,54 @@ public class Map {
      *
      * @return
      */
-    public ArrayList<Sprite> getSpritesOnScreen(){
+    private ArrayList<Sprite> getSpritesOnScreen(){
         ArrayList<Sprite> screenSprites=new ArrayList<Sprite>();
         for (Sprite s:currentLevel.getSprites()){
             if (camera.getArea().contains(s.getPos())) {
-                screenSprites.add(s);
+                if(screenSprites.add(s)) {
+                	System.out.println("Sprite added");
+                }
             }
         }
         return screenSprites;
     }
+    
+    public ArrayList<Sprite> getScreenSprites(){
+    	return screenSprites;
+    }
+    
+    public boolean spriteAt(Point pos) {
+    	if (camera.getArea().contains(pos)) {
+    		for (Sprite s:screenSprites) {
+    			if (s.getPos().distance(pos)==0) {
+    				return true;
+    			}
+    		}
+    	} else {
+    		for (Sprite s:currentLevel.getSprites()) {
+    			if (s.getPos().distance(pos)==0) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
+    public boolean solidAt(Point pos) {
+    	if (camera.getArea().contains(pos)) {
+    		for (Sprite s:screenSprites) {
+    			if (s.getPos().distance(pos)==0&&s.isSolid()) {
+    				return true;
+    			}
+    		}
+    	} else {
+    		for (Sprite s:currentLevel.getSprites()) {
+    			if (s.getPos().distance(pos)==0&&s.isSolid()) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
 }

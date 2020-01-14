@@ -252,7 +252,7 @@ public class Camera {
 
         @Override
         public Rectangle instanceGetArea(Camera observer) {
-        	return new Rectangle((int) (observer.location.getX()-observer.width/2),(int) (observer.location.getY()+observer.height/2),observer.CameraArea.width,observer.CameraArea.height);
+        	return new Rectangle((int) (observer.location.getX()-observer.width/2),(int) (observer.location.getY()-observer.height/2),observer.CameraArea.width,observer.CameraArea.height);
         }
 
         @Override

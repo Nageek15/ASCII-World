@@ -8,7 +8,7 @@ import gameutil.text.Argument;
 import gameutil.text.Console;
 
 public class App {
-	private Map map;
+	public static Map map;
 	private enum GAME_STATE {menu,intro,load,inGame,exit};
 	private GAME_STATE state=GAME_STATE.menu;
 	public static Player p;
@@ -50,7 +50,8 @@ public class App {
 				break;
 				case inGame:
 					//update
-					//map.getCamera().location=p.getPos();
+					p.update();
+					map.getCamera().location=p.getPos();
 					map.update();
 					
 					//draw
@@ -71,10 +72,23 @@ public class App {
 						case "walk":
 							switch (cmd.get(1)) {
 								case "right":
-									p.setPos(new Point(p.getPos().x+1,p.getPos().y));
+									p.walk(1);
 								break;
 								case "left":
-									p.setPos(new Point(p.getPos().x-1,p.getPos().y));
+									p.walk(-1);
+								break;
+							}
+						break;
+						case "jump":
+							switch (cmd.get(1)) {
+								default:
+									p.jump(0);
+								break;
+								case "right":
+									p.jump(1);
+								break;
+								case "left":
+									p.walk(-1);
 								break;
 							}
 						break;
