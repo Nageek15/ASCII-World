@@ -1,6 +1,7 @@
 package ascii.map;
 
 import ascii.App;
+import ascii.sprites.Item;
 import ascii.sprites.Sprite;
 import gameutil.text.Console;
 
@@ -24,7 +25,6 @@ public class Map {
 
     public Map(JPanel observer){
         levels=new ArrayList<>();
-        levels.add(new Level());
         this.observer=observer;
         camera=new Camera(observer);
         lastCameraLocation=camera.location;
@@ -43,7 +43,7 @@ public class Map {
     
     public Map(){
         levels=new ArrayList<>();
-        levels.add(new Level());
+        levels.add(Level.load("levels/1.lv"));
         this.observer=null;
         camera=new Camera();
         lastCameraLocation=camera.location;
@@ -65,7 +65,6 @@ public class Map {
         currentLevel.update();
         camera.update();
         screenSprites=getSpritesOnScreen();
-        System.out.println(screenSprites.size());
     }
 
     public static Level getCurrentLevel(){
@@ -82,19 +81,22 @@ public class Map {
     	
     	int cameraX=camera.getArea().width/2;
     	int cameraY=camera.getArea().height/2;
-    	System.out.println(screenSprites.size());
     	for (Sprite s:screenSprites) {
     		int x=s.getPos().x-camera.location.x+cameraX;
-    		int y=s.getPos().y-camera.location.y+cameraY;
+    		int y=s.getPos().y*-1-camera.location.y*-1+cameraY;//invert y so that y+ is up
     		spritesToDraw.put(new Point(x,y),s);
     	}
     	
     	spritesToDraw.put(new Point(cameraX,cameraY),App.p);
     	
-    	for (int row=camera.getArea().height-1;row>=0;row--) {
+    	for (int row=0;row<camera.getArea().height;row++) {
     		for (int column=0;column<camera.getArea().width;column++) {
     			if (spritesToDraw.containsKey(new Point(column,row))) {
-    				Console.s.print(spritesToDraw.get(new Point(column,row)).getChar());
+    				Sprite s=spritesToDraw.get(new Point(column,row));
+    				Console.s.print(s.getChar());
+    				if (s.useSpace()) {
+    					Console.s.print(" |");
+    				}
     			}else {
     				Console.s.print("░");
     			}
@@ -119,9 +121,7 @@ public class Map {
         ArrayList<Sprite> screenSprites=new ArrayList<Sprite>();
         for (Sprite s:currentLevel.getSprites()){
             if (camera.getArea().contains(s.getPos())) {
-                if(screenSprites.add(s)) {
-                	System.out.println("Sprite added");
-                }
+                screenSprites.add(s);
             }
         }
         return screenSprites;
@@ -129,6 +129,40 @@ public class Map {
     
     public ArrayList<Sprite> getScreenSprites(){
     	return screenSprites;
+    }
+    
+    public Item itemAt(Point pos) {
+    	if (camera.getArea().contains(pos)) {
+    		for (Sprite s:screenSprites) {
+    			if (s.getPos().distance(pos)==0&&s.getClass().getSuperclass().getName().equals("ascii.sprites.Item")) {
+    				return (Item) s;
+    			}
+    		}
+    	} else {
+    		for (Sprite s:currentLevel.getSprites()) {
+    			if (s.getPos().distance(pos)==0&&s.getClass().getSuperclass().getName().equals("ascii.sprites.Item")) {
+    				return (Item) s;
+    			}
+    		}
+    	}
+    	return null;
+    }
+    
+    public boolean isItemAt(Point pos) {
+    	if (camera.getArea().contains(pos)) {
+    		for (Sprite s:screenSprites) {
+    			if (s.getPos().distance(pos)==0&&s.getClass().getSuperclass().getName().equals("ascii.sprites.Item")) {
+    				return true;
+    			}
+    		}
+    	} else {
+    		for (Sprite s:currentLevel.getSprites()) {
+    			if (s.getPos().distance(pos)==0&&s.getClass().getSuperclass().getName().equals("ascii.sprites.Item")) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
     }
     
     public boolean spriteAt(Point pos) {
@@ -165,4 +199,7 @@ public class Map {
     	return false;
     }
     
+    public void saveLevels(String path) {
+    	//save levels
+    }
 }

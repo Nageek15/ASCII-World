@@ -3,6 +3,7 @@ package ascii.sprites;
 import java.awt.Point;
 
 import ascii.App;
+import gameutil.text.Console;
 
 public class Player extends Sprite{
 	
@@ -12,9 +13,37 @@ public class Player extends Sprite{
 	private int jumpHorizontalVelocity=0;
 	private boolean jumping=false;
 	
+	/**For new game
+	 * 
+	 * @param name
+	 */
 	public Player(String name) {
 		super(name,'@',new Point(0,5),10);
+		i=new Inventory(this);
+		i.add(new Scroll("Scroll of Grabbing","This is a command scroll. These scrolls disappear from your inventory once you use them. They will tell you a list of things that you can type and what it will do.\n*note that \"\" are used for arguments (<argument>) that have spaces in them\n\ngrab <item> - grab something\nuse - use something"));
+		i.add(new Scroll("Scroll of Walking", "walk <left/right> - walk left or walk right"));
 	}
+	
+	/**For loading from file
+	 * 
+	 * @param name
+	 * @param pos
+	 * @param hp
+	 * @param mhp
+	 * @param jump
+	 * @param maxJump
+	 * @param jumpHorizontalVelocity
+	 * @param jumping
+	 */
+	public Player(String name, Point pos, int hp,int mhp,int jump,int maxJump,int jumpHorizontalVelocity,boolean jumping) {
+		super(name,'@',pos,mhp);
+		this.hp=hp;//set hp
+		this.jump=jump;
+		this.maxJump=maxJump;
+		this.jumpHorizontalVelocity=jumpHorizontalVelocity;
+		this.jumping=jumping;
+	}
+	
 	
 	public Inventory getInventory() {
 		return i;
@@ -39,14 +68,14 @@ public class Player extends Sprite{
 	
 	@Override
 	public void update() {
-		if (jumping=true) {
+		if (jumping==true) {
 			jump--;
-			attemptMove(new Point(getX()+jumpHorizontalVelocity,getY()-1));
+			attemptMove(new Point(getX()+jumpHorizontalVelocity,getY()+1));
 			if (jump<=0) {
 				jumping=false;
 			}
 		} else {
-			attemptMove(new Point(getX(),getY()+1));
+			attemptMove(new Point(getX(),getY()-1));
 		}
 	}
 	
@@ -56,9 +85,24 @@ public class Player extends Sprite{
 	 */
 	public void walk(int distance) {
 		//has to have solid below to push on to walk
-		if (App.map.solidAt(new Point(getX(),getY()+1))) {
-			attemptMove(new Point(getX()-distance,getY()));
+		if (App.map.solidAt(new Point(getX(),getY()-1))) {
+			attemptMove(new Point(getX()+distance,getY()));
 		}
+	}
+	
+	public void pickup() {
+		if (App.map.isItemAt(pos)) {
+			Item item=App.map.itemAt(pos);
+			i.add(item);
+			Console.s.println("You found a(n) "+item.getName()+"!");
+		} else {
+			Console.s.println("There was nothing there.");
+		}
+		Console.s.pause();
+	}
+	
+	public void printInv() {
+		i.printContents();
 	}
 	
 }

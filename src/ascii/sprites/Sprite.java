@@ -11,6 +11,8 @@ public class Sprite {
 	protected int hp;
 	protected int maxhp;
 	protected boolean solid;
+	protected boolean space=false;
+	protected boolean inWorld=true;
 	
 	public Sprite(String name,char c,Point pos) {
 		this.name=name;
@@ -40,7 +42,7 @@ public class Sprite {
 	}
 	
 	public Sprite(char c) {
-		this.name=this.getClass().getTypeName();
+		this.name=this.getClass().getSimpleName();
 		this.c=c;
 		this.pos=new Point(0,0);
 		hp=0;
@@ -49,7 +51,7 @@ public class Sprite {
 	}
 	
 	public Sprite(char c,Point pos) {
-		this.name=this.getClass().getTypeName();
+		this.name=this.getClass().getSimpleName();
 		this.c=c;
 		this.pos=pos;
 		hp=0;
@@ -58,7 +60,7 @@ public class Sprite {
 	}
 	
 	public Sprite(char c,Point pos,boolean solid) {
-		this.name=this.getClass().getTypeName();
+		this.name=this.getClass().getSimpleName();
 		this.c=c;
 		this.pos=pos;
 		hp=0;
@@ -85,7 +87,7 @@ public class Sprite {
 	}
 	
 	public Sprite(char c,int hp) {
-		this.name=this.getClass().getTypeName();
+		this.name=this.getClass().getSimpleName();
 		this.c=c;
 		this.pos=new Point(0,0);
 		this.hp=hp;
@@ -94,7 +96,7 @@ public class Sprite {
 	}
 	
 	public Sprite(char c,Point pos,int hp) {
-		this.name=this.getClass().getTypeName();
+		this.name=this.getClass().getSimpleName();
 		this.c=c;
 		this.pos=pos;
 		this.hp=hp;
@@ -112,7 +114,7 @@ public class Sprite {
 	}
 	
 	public Sprite() {
-		this.name=this.getClass().getTypeName();
+		this.name=this.getClass().getSimpleName();
 		this.c='-';
 		this.pos=new Point(0,0);
 		hp=1;
@@ -168,6 +170,14 @@ public class Sprite {
    
    public int getY() {
 	   return pos.y;
+   }
+   
+   public boolean useSpace() {
+	   return space;
+   }
+   
+   public boolean inWorld() {
+	   return inWorld;
    }
 	
 	

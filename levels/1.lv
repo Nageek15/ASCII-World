@@ -1,0 +1,47 @@
+
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -14 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -13 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -12 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -11 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -10 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -9 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -8 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -7 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -6 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -5 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -4 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -3 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -2 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -1 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 0 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 1 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 2 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 3 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 4 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 5 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 6 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 7 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 8 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 9 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 10 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 11 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 12 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 13 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 14 int 4 |/e1\|
+
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 4 int 5 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 5 int 5 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 6 int 5 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 7 int 5 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 8 int 5 |/e1\|
+
+
+
+S ascii.sprites.Crystal |/o\| java.awt.Point |/p\| int 6 int 6 |/e1\|
+S ascii.sprites.Crystal |/o\| java.awt.Point |/p\| int 7 int 6 |/e1\| 
+
+S ascii.sprites.Scroll String |/l\| Scroll of Inventory |/eS\| |/o\| java.awt.Point |/p\| int 0 int 5 |/e1\| |/p\| String |/l\| inv - show inventory |/eS\|
+S ascii.sprites.Scroll String |/l\| Scroll of Jumping |/eS\| |/o\| java.awt.Point |/p\| int -12 int 5 |/e1\| |/p\| String |/l\| jump - jump up |/nl\| jump <left/right> - jump left or jump right |/eS\|
+
+
+||

@@ -25,14 +25,24 @@ public class Argument {
 		ArrayList<String> argList=new ArrayList<>();
 		//this stub represents the unscanned part of the string.
 		String cmdStub=cmd;
-		
 		//Scan the cmd string for args
 		while (cmdStub.contains(" ")) {
 			//get index of next space
 			int spaceIndex=cmdStub.indexOf(" ");
 			//parse arg
-			argList.add(cmdStub.substring(0, spaceIndex));
-			//skip spaceIndex
+			String arg=cmdStub.substring(0, spaceIndex);
+			if (arg.startsWith("\"")&&cmdStub.substring(1).indexOf("\"")!=-1) {
+				int quoteIndex=cmdStub.substring(1).indexOf("\"");
+				arg=cmdStub.substring(1,quoteIndex+1);//plus one because quote index is from a substring started from index 1
+				argList.add(arg);
+				//skip quoteIndex
+				cmdStub=cmdStub.substring(quoteIndex+1);
+				spaceIndex=cmdStub.indexOf(" ");//reset space index
+			} else {
+				argList.add(arg);
+				//skip spaceIndex
+				
+			}
 			cmdStub=cmdStub.substring(spaceIndex+1);
 		}
 		
@@ -89,6 +99,7 @@ public class Argument {
 	 * -|/e(depth)\\| signals the end of arguments for an object at a specific depth
 	 * -|/l\\| signals the beginning of a long string if placed after String (long strings can have spaces)
 	 * -|/eS\\| signals the end of a long string if placed at the end of a long string
+	 * -|/nl\\| signals new line
 	 * -note that \\ is the escape code for \ 
 	 * @param args class name and args
 	 * @param depth the amount of "functions deep" the function is. For example, an object that is instantiated in order to instantiate an object which is being used to instantiate the main object has a depth of 2
@@ -165,14 +176,24 @@ public class Argument {
                     			//increase i to check next value
                             	i++;
                     			String s="";
+                    			boolean addSpace=true;
                         		while (args.hasArg(i)) {
                             		if (args.get(i).equals("|/eS\\|")) {
                             			//break out of loop if end of string code is reached
                             			break;
+                            		} else if (args.get(i).equals("|/nl\\|")) {
+                            			//add new line to string (useful if a file is being read)
+                            			s+="\n";
+                            			addSpace=false;//don't add a space to the next argument
+                            		} else {
+                            			//add next arg to string with space
+                            			if (addSpace) {
+                            				s+=" "; //add a space
+                            			} else {
+                            				addSpace=true;//reset addSpace and don't add a space
+                            			}
+                                		s+=args.get(i);
                             		}
-                            		//add next arg to string with space
-                            		s+=" ";
-                            		s+=args.get(i);
                             		i++;
                             	}
                         		if (!s.equals("")) {

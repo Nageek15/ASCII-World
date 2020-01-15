@@ -6,7 +6,6 @@ import gameutil.text.Console;
 
 public class Item extends Sprite{
 	protected boolean useable;
-	protected boolean inWorld;
 	protected String desc;
 	
 	public Item() {
@@ -50,7 +49,7 @@ public class Item extends Sprite{
 	}
 	
 	public Item(char c,Point pos,String desc,boolean useable,boolean inWorld) {
-		super('*',pos,false);
+		super(c,pos,false);
 		this.desc=desc;
 		this.useable=useable;
 		this.inWorld=inWorld;
@@ -63,7 +62,7 @@ public class Item extends Sprite{
 	}
 	
 	public Item(String name,char c,Point pos,String desc,boolean useable,boolean inWorld) {
-		super(name,'*',pos,false);
+		super(name,c,pos,false);
 		this.desc=desc;
 		this.useable=useable;
 		this.inWorld=inWorld;

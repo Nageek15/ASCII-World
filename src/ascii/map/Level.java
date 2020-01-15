@@ -23,11 +23,11 @@ public class Level {
         //make a blank level
         sprites=new ArrayList<>();
         path="dat/NULL.lv";
-        sprites.add(new Block(new Point(0,4)));
+        /*sprites.add(new Block(new Point(0,4)));
         sprites.add(new Block(new Point(1,4)));
         sprites.add(new Block(new Point(2,4)));
         sprites.add(new Block(new Point(-1,4)));
-        sprites.add(new Block(new Point(-2,4)));
+        sprites.add(new Block(new Point(-2,4)));*/
     }
 
     public Level(String path){
@@ -38,11 +38,17 @@ public class Level {
     }
 
     public final void update(){
+    	ArrayList<Sprite> spritesToRemove=new ArrayList<>();
         for (Sprite s:sprites){
-            //Update sprites
-            s.update();
-            //TODO check and carry out collisions while sprite moves one pixel at a time *will do in the kinetic update
+            if (s.inWorld()) {
+            	//Update sprites
+            	s.update();
+            } else {
+            	//Sprite not in world, so remove it
+            	spritesToRemove.add(s);//use other list to avoid concurrent modification exception
+            }
         }
+        sprites.removeAll(spritesToRemove);//remove necessary sprites
     }
 
     public void save() throws IOException {
@@ -87,17 +93,17 @@ public class Level {
         }
         int line=0;
         try {
-            while (read != "||") {
+            while (!read.equals("||")) {
                 read = reader.readLine();
                 Argument args=Argument.getArgs(read);
-                if (args.cmd().startsWith("S ")){
+                if (args.cmd().equals("S")){
                     args=Argument.getArgs(read.substring(2));
                     level.sprites.add((Sprite) Argument.constructFromArgs(args));
                 }
                 line++;
             }
         } catch (IOException e) {
-            Console.s.println("Error! Failed to load level because io exception!");
+            Console.s.println("Error! Failed to load level because IO exception!");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e1) {
@@ -113,6 +119,7 @@ public class Level {
             //stop reading
             read="||";
         }
+        System.out.println("Loaded "+level.sprites.size()+" sprites for level "+level.path.substring(7));
         return level;
     }
 

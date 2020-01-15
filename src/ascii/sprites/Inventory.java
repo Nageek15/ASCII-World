@@ -53,34 +53,28 @@ public class Inventory {
 	
 	public boolean use(Item i) {
 		if (i.useable && items.contains(i)) {
-			items.remove(i);
 			i.use();
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean use(String name) {
-		for (Item i:items) {
-			if (i.name.equals(name)) {
-				return use(i);
-			}
-		}
-		return false;
-	}
-	
 	public int use(String name,int amount) {
 		int amountUsed=0;
+		ArrayList<Item> itemsToRemove=new ArrayList<Item>();
 		for (Item i:items) {
 			if (amountUsed>=amount) {
 				break;
 			}
 			if (i.name.equals(name)) {
 				if (use(i)) {
+					itemsToRemove.add(i);
 					amountUsed++;
 				}
 			}
 		}
+		
+		items.removeAll(itemsToRemove);
 		
 		return amountUsed;
 	}
@@ -89,10 +83,11 @@ public class Inventory {
 		Console.s.println("Inventory:");
 		Console.s.println("");
 		for (Item i:items) {
-			Console.s.println(" - ["+i.c+"]"+" "+i.name);
+			Console.s.println("   - ["+i.c+"]"+" "+i.name);
 			Console.s.println("       Usable: "+i.useable);
 			Console.s.println("       ");
 			Console.s.println("       "+i.desc);
+			Console.s.println("");
 		}
 	}
 }
