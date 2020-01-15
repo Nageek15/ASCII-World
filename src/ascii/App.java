@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 import ascii.map.Map;
 import ascii.sprites.Block;
+import ascii.sprites.Crystal;
 import ascii.sprites.Item;
 import ascii.sprites.Player;
 import ascii.sprites.Sprite;
@@ -145,12 +146,12 @@ public class App {
 				break;
 				case intro:
 					Console.s.clr();
-					Console.s.print("What is your name?");
+					Console.s.print("What is your name? ");
 					String name=Console.s.readLine();
 					//create player
 					p=new Player(name);
 					//intro text
-					Console.s.println("You are about to appear in ASCII World. Type 'use \"Scroll of Grabbing\"' for help.");
+					Console.s.println("You are about to appear in ASCII World. Type 'use \"Scroll of Grabbing\" for help, remember this cause this is the only time that you can read this.");
 					//get game ready
 					map=new Map();
 					state=GAME_STATE.inGame;
@@ -159,9 +160,14 @@ public class App {
 				case inGame:
 					//update
 					p.update();
-					if (p.inWorld()==false){
+					if (p.inWorld()==false||p.getY()<0){
 						Console.s.clr();
 						Console.s.println("GAME OVER: YOU ARE NO LONGER IN ASCII WORLD");
+						Console.s.pause();
+						state=GAME_STATE.menu;
+					} else if (Crystal.crystalsUsed()==2) {
+						Console.s.clr();
+						Console.s.println("YOU WIN!");
 						Console.s.pause();
 						state=GAME_STATE.menu;
 					}
@@ -190,7 +196,7 @@ public class App {
 								break;
 							}
 						break;
-						case "jump":
+						case "brincar":
 							switch (cmd.get(1)) {
 								default:
 									p.jump(0);
@@ -231,6 +237,35 @@ public class App {
 							Console.s.println("Camera Y: "+map.getCamera().location.y);
 							Console.s.pause();
 						break;
+						
+						case "fork":
+							Console.s.println("Daniah stop swearing please.");
+							Console.s.println(p.getName()+", you too.");
+							Console.s.pause();
+						break;
+						case "fly":
+							Console.s.println("No.");
+							Console.s.pause();
+						break;
+						case "spell":
+							switch (cmd.get(1)){
+								case "please fly":
+									switch (cmd.get(2)) {
+										case "right":
+											p.attemptMove(new Point(p.getX()+1,p.getY()));
+										break;
+										case "left":
+											p.attemptMove(new Point(p.getX()-1,p.getY()));
+										break;
+										case "up":
+											p.attemptMove(new Point(p.getX(),p.getY()+1));
+										break;
+										case "down":
+											p.attemptMove(new Point(p.getX(),p.getY()-1));
+										break;
+									}
+								break;
+							}
 					}
 					
 					

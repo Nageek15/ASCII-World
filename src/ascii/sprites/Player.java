@@ -20,7 +20,7 @@ public class Player extends Sprite{
 	public Player(String name) {
 		super(name,'@',new Point(0,5),10);
 		i=new Inventory(this);
-		i.add(new Scroll("Scroll of Grabbing","This is a command scroll. These scrolls disappear from your inventory once you use them. They will tell you a list of things that you can type and what it will do.\n*note that \"\" are used for arguments (<argument>) that have spaces in them\n\ngrab <item> - grab something\nuse - use something"));
+		i.add(new Scroll("Scroll of Grabbing","This is a command scroll. These scrolls disappear from your inventory once you use them. They will tell you a list of things that you can type and what it will do.\n*note that \"\" are used for arguments (<argument>) that have spaces in them\n\ngrab - grab something\nuse <item> - use something"));
 		i.add(new Scroll("Scroll of Walking", "walk <left/right> - walk left or walk right"));
 	}
 	
