@@ -165,6 +165,7 @@ public class App {
 						Console.s.println("GAME OVER: YOU ARE NO LONGER IN ASCII WORLD");
 						Console.s.pause();
 						state=GAME_STATE.menu;
+						break;
 					} else if (Crystal.crystalsUsed()==2) {
 						Console.s.clr();
 						Console.s.println("YOU WIN!");
