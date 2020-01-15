@@ -85,7 +85,7 @@ public class App {
 								//load player
 								String read="";
 						        BufferedReader reader=null;
-						        String path=saveDir+"/dat/player.dat";
+						        String path="saves/"+saveDir+"/player.dat";
 						        try {
 						            reader=new BufferedReader(new FileReader(path));
 						        } catch (FileNotFoundException e) {
@@ -279,9 +279,14 @@ public class App {
 	
 	public void save() {
 		String path="saves/"+p.getName()+"/";
-		new File(path);
-		new File(path+"dat");
-		new File(path+"levels");
+		try {
+			new File(path).createNewFile();
+			new File(path+"dat").createNewFile();
+			new File(path+"levels").createNewFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		//save levels
 		map.saveLevels(path);
 		
@@ -289,8 +294,31 @@ public class App {
 		try {
 			writer = new BufferedWriter(new FileWriter(path+"player.dat"));
 			//write stuff to player data
-			writer.write("");
-			writer.write("||");
+			//player properties (name, pos x and y, hp, mhp, jump, max jump, jump horizontal velocity, jumping)
+			writer.write(p.getName());//ln 0
+			writer.newLine();
+			writer.write(String.valueOf(p.getX()));//ln 1
+			writer.newLine();
+			writer.write(String.valueOf(p.getY()));//ln 2
+			writer.newLine();
+			writer.write(String.valueOf(p.getHealth()));//ln 3
+			writer.newLine();
+			writer.write(String.valueOf(p.getMaxHealth()));//ln 4
+			writer.newLine();
+			writer.write(String.valueOf(p.getJump()));//ln 5
+			writer.newLine();
+			writer.write(String.valueOf(p.getMaxJump()));//ln 6
+			writer.newLine();
+			writer.write(String.valueOf(p.getJumpHorizontalVelocity()));//ln 7
+			writer.newLine();
+			writer.write(String.valueOf(p.isJumping()));//ln 8
+			writer.newLine();
+			//player inventory
+			for (Item i:p.getInventory().getItems()) {
+				writer.write("I "+i.getClass().getName()+" "+i.getProps());
+				writer.newLine();
+			}
+			writer.write("|i|");
 	        writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

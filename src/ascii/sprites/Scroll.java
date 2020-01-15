@@ -2,6 +2,7 @@ package ascii.sprites;
 
 import java.awt.Point;
 
+import gameutil.text.Argument;
 import gameutil.text.Console;
 
 public class Scroll extends Item{
@@ -26,5 +27,10 @@ public class Scroll extends Item{
 		Console.s.println("");
 		Console.s.println(contents);
 		Console.s.pause();
+	}
+	
+	@Override
+	public String getProps() {
+		return "String |/l\\| "+name+" |/eS\\| |/o\\| java.awt.Point |/p\\| int "+getX()+" int "+getY()+" |/e1\\| |/p\\| String |/l\\| "+Argument.encodeNewLine(contents)+" |/eS\\|";
 	}
 }

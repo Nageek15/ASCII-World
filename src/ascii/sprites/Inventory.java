@@ -90,4 +90,8 @@ public class Inventory {
 			Console.s.println("");
 		}
 	}
+	
+	public ArrayList<Item> getItems(){
+		return items;
+	}
 }

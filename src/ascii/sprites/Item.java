@@ -71,5 +71,9 @@ public class Item extends Sprite{
 	public void use() {
 		Console.s.println("Nothing happens.");
 	}
+	@Override
+	public String getProps() {
+		return "|/p\\| String |/l\\| "+name+" |/eS\\| char "+c+" |/o\\| java.awt.Point |/p\\| int "+getX()+" int "+getY()+" |/e1\\| String |/l\\| "+desc+" |/eS\\| boolean "+String.valueOf(useable)+" boolean "+String.valueOf(inWorld);
+	}
 
 }

@@ -42,6 +42,7 @@ public class Player extends Sprite{
 		this.maxJump=maxJump;
 		this.jumpHorizontalVelocity=jumpHorizontalVelocity;
 		this.jumping=jumping;
+		i=new Inventory(this);
 	}
 	
 	
@@ -103,6 +104,30 @@ public class Player extends Sprite{
 	
 	public void printInv() {
 		i.printContents();
+	}
+	
+	public int getHealth() {
+		return hp;
+	}
+	
+	public int getMaxHealth() {
+		return maxhp;
+	}
+	
+	public int getJump() {
+		return jump;
+	}
+	
+	public int getMaxJump() {
+		return maxJump;
+	}
+	
+	public int getJumpHorizontalVelocity() {
+		return jumpHorizontalVelocity;
+	}
+	
+	public boolean isJumping() {
+		return jumping;
 	}
 	
 }

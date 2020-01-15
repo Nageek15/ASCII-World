@@ -94,6 +94,15 @@ public class Argument {
 		return true;
 	}
 	
+	/**replaces all new line characters (\n) with |/nl\| for strings meant to be used in arguments to be constructed from
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String encodeNewLine(String s) {
+		return s.replace("\n", "|/nl\\|");
+	}
+	
 	/**-|/p\\| arg signifies that subsequent args are primitive
 	 * -|/o\\| signals that subsequent args are objects that require instantiation
 	 * -|/e(depth)\\| signals the end of arguments for an object at a specific depth
@@ -207,6 +216,13 @@ public class Argument {
                     			arguments.add(args.get(i));
                     			
                     		}
+                    	} else if (args.get(i).equals("boolean")) {
+                    		
+                    		classList.add(boolean.class);
+                    		arguments.add(args.get(i+1).equals("true"));
+                    		//increase i to catch up
+                        	i++;
+                        	
                     	}
                     	
                     	
