@@ -41,7 +41,7 @@ S ascii.sprites.Crystal |/o\| java.awt.Point |/p\| int 6 int 6 |/e1\|
 S ascii.sprites.Crystal |/o\| java.awt.Point |/p\| int 7 int 6 |/e1\| 
 
 S ascii.sprites.Scroll String |/l\| Scroll of Inventory |/eS\| |/o\| java.awt.Point |/p\| int 0 int 5 |/e1\| |/p\| String |/l\| inv - show inventory |/eS\|
-S ascii.sprites.Scroll String |/l\| Scroll of Jumping |/eS\| |/o\| java.awt.Point |/p\| int -12 int 5 |/e1\| |/p\| String |/l\| jump - jump up |/nl\| jump <left/right> - jump left or jump right |/eS\|
+S ascii.sprites.Scroll String |/l\| Scroll of Jumping |/eS\| |/o\| java.awt.Point |/p\| int -12 int 5 |/e1\| |/p\| String |/l\| brincar - jump up |/nl\| brincar <left/right> - jump left or jump right |/eS\|
 
 
 ||

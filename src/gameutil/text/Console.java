@@ -4,6 +4,7 @@ import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Robot;
 import java.awt.TextArea;
@@ -53,6 +54,7 @@ public class Console {
 		field = new JTextArea();
 		field.setEditable(false);
 		field.setFocusable(true);
+		field.setFont(field.getFont().deriveFont(18f));
 		keylistener = new TAdapter(field);
 		field.addKeyListener(keylistener);
 		field.setBackground(Color.BLACK);
