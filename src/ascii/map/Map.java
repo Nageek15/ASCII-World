@@ -44,10 +44,11 @@ public class Map {
     public Map(){
         levels=new ArrayList<>();
         levels.add(Level.load("levels/1.lv"));
+		levels.add(Level.load("levels/2.lv"));
         this.observer=null;
         camera=new Camera();
         lastCameraLocation=camera.location;
-        setLevel(0);
+        setLevel(1);
         screenSprites=getSpritesOnScreen();
     }
 

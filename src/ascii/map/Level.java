@@ -4,7 +4,6 @@ import ascii.sprites.Block;
 import ascii.sprites.Sprite;
 import gameutil.text.*;
 import gameutil.text.Console;
-import org.omg.PortableServer.THREAD_POLICY_ID;
 
 import java.awt.*;
 import java.io.*;
