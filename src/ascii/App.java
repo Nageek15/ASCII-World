@@ -26,7 +26,7 @@ public class App {
 	private GAME_STATE state=GAME_STATE.menu;
 	public static Player p;
 	
-	
+	//Always gotta have that unicorns array of Strings which are arguments applied to the command to run the jar.
 	public static void main(String[] unicorns) {
 		new App();
 	}
@@ -53,96 +53,105 @@ public class App {
 						choice=Console.s.readLine();
 						if (choice.equals("new")) {
 							state=GAME_STATE.intro;
-						} else {
-							//get directories
-							File file = new File("saves");
-							String[] directories = file.list(new FilenameFilter() {
-							  @Override
-							  public boolean accept(File current, String name) {
-							    return new File(current, name).isDirectory();
-							  }
-							});
-							if (directories.length>0) {
-								boolean directoryFound=false;
-								String saveDir="";
-								while (!directoryFound) { //ask until user enters a valid directory
-									//print save files and ask which one should be loaded if there are save files
-									Console.s.clr();
-									Console.s.println("Game Menu");
-									Console.s.println("");
-									Console.s.println(Arrays.toString(directories));
-									Console.s.print("What save would you like to load (type name of save without brackets?)");
-									choice=Console.s.readLine();
-									for (String d:directories) {
-										if (choice.equals(d)) {
-											directoryFound=true;
-											saveDir=d;
-										}
-									}
-								}
-								//load from save directory
-								
-								//load player
-								String read="";
-						        BufferedReader reader=null;
-						        String path="saves/"+saveDir+"/player.dat";
-						        try {
-						            reader=new BufferedReader(new FileReader(path));
-						        } catch (FileNotFoundException e) {
-						            //level is not saved, so keep the level the way it is and return
-						            Console.s.println("No information to load for level at path: "+path);
-						            
-						        }
-						        
-						        try {
-						        	//read player properties (name, pos x and y, hp, mhp, jump, max jump, jump horizontal velocity, jumping)
-						        	p=new Player(reader.readLine(),new Point(Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine())),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),reader.readLine().equals("true"));
-						        	int line=9;
-						        	//read inventory contents
-						            while (!read.equals("|i|")) {
-						                read = reader.readLine();
-						                Argument args=Argument.getArgs(read);
-						                if (args.cmd().equals("I")){
-						                    args=Argument.getArgs(read.substring(2));
-						                    p.getInventory().add((Item) Argument.constructFromArgs(args));
-						                }
-						                line++;
-						            }
-						        } catch (IOException e) {
-						            Console.s.println("Error! Failed to load player because IO exception!");
-						            try {
-						                Thread.sleep(2000);
-						            } catch (InterruptedException e1) {
-						                e1.printStackTrace();
-						            }
-						            System.exit(1);
-						        }
-						        //read the next line
-						        try {
-						            read=reader.readLine();
-						        } catch (IOException e) {
-						            e.printStackTrace();
-						            //stop reading
-						            read="|i|";
-						        }
-								
-								//load levels
-									
-									
-								
-								Console.s.pause();
-							} else {
-								//if there were no save files found then notify the user and return to title Screen.
-								Console.s.println("No save files were found");
-								Console.s.pause();
-							}
+						} else if (choice.equals("load")){
+							state=GAME_STATE.load;
 						}
 					} else if (choice.equals("exit")){
 						state=GAME_STATE.exit;
 					}
 				break;
 				case load:
-					//load the stuffs
+					//get directories
+					File file = new File("saves");
+					String[] directories = file.list(new FilenameFilter() {
+					  @Override
+					  public boolean accept(File current, String name) {
+					    return new File(current, name).isDirectory();
+					  }
+					});
+					if (directories.length>0) {
+						boolean directoryFound=false;
+						String saveDir="";
+						while (!directoryFound) { //ask until user enters a valid directory
+							//print save files and ask which one should be loaded if there are save files
+							Console.s.clr();
+							Console.s.println("Game Menu");
+							Console.s.println("");
+							Console.s.println(Arrays.toString(directories));
+							Console.s.print("What save would you like to load (type name of save without brackets)?");
+							choice=Console.s.readLine();
+							for (String d:directories) {
+								if (choice.equals(d)) {
+									directoryFound=true;
+									saveDir=d;
+								}
+							}
+						}
+						//load from save directory
+						
+						//load player
+						String read="";
+				        BufferedReader reader=null;
+				        String path="saves/"+saveDir+"/player.dat";
+				        try {
+				            reader=new BufferedReader(new FileReader(path));
+				        } catch (FileNotFoundException e) {
+				            //player is not saved, so keep the level the way it is and return
+				            Console.s.println("No information to load for player at path: "+path);
+				            Console.s.println("Press any key to continue.");
+				            state=GAME_STATE.menu;
+				            Console.s.pause();
+				            break;
+				        }
+				        
+				        try {
+				        	//read player properties (name, pos x and y, hp, mhp, jump, max jump, jump horizontal velocity, jumping)
+				        	p=new Player(reader.readLine(),new Point(Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine())),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),reader.readLine().equals("true"));
+				        	
+				        	//load levels
+				        	int lvNo=Integer.parseInt(reader.readLine());							
+							map=new Map("saves/"+saveDir+"/levels",lvNo);
+							int noCrystalsUsed=Integer.parseInt(reader.readLine());
+							Crystal.set(noCrystalsUsed);
+							//load inventory
+				        	int line=11;
+				        	//read inventory contents
+				            while (!read.equals("|i|")) {
+				                read = reader.readLine();
+				                Argument args=Argument.getArgs(read);
+				                if (args.cmd().equals("I")){
+				                    args=Argument.getArgs(read.substring(2));
+				                    p.getInventory().add((Item) Argument.constructFromArgs(args));
+				                }
+				                line++;
+				            }
+				        } catch (IOException e) {
+				            Console.s.println("Error! Failed to load player because IO exception!");
+				            try {
+				                Thread.sleep(2000);
+				            } catch (InterruptedException e1) {
+				                e1.printStackTrace();
+				            }
+				            System.exit(1);
+				        }
+				        //read the next line
+				        try {
+				            read=reader.readLine();
+				        } catch (IOException e) {
+				            e.printStackTrace();
+				            //stop reading
+				            read="|i|";
+				        }
+						
+						
+						Console.s.pause();
+					} else {
+						//if there were no save files found then notify the user and return to title Screen.
+						Console.s.println("No save files were found");
+						state=GAME_STATE.menu;
+						Console.s.pause();
+					}
+					state=GAME_STATE.inGame;
 				break;
 				case intro:
 					Console.s.clr();
@@ -151,9 +160,9 @@ public class App {
 					//create player
 					p=new Player(name);
 					//intro text
-					Console.s.println("You are about to appear in ASCII World. Type 'use \"Scroll of Grabbing\" for help, remember this cause this is the only time that you can read this.");
+					Console.s.println("You are about to appear in ASCII World.");
 					//get game ready
-					map=new Map();
+					map=new Map("levels",0);
 					state=GAME_STATE.inGame;
 					Console.s.pause();
 				break;
@@ -165,12 +174,20 @@ public class App {
 						Console.s.println("GAME OVER: YOU ARE NO LONGER IN ASCII WORLD");
 						Console.s.pause();
 						state=GAME_STATE.menu;
+						Crystal.set(0);//reset crystals used
 						break;
-					} else if (Crystal.crystalsUsed()==2) {
-						Console.s.clr();
-						Console.s.println("YOU WIN!");
-						Console.s.pause();
-						state=GAME_STATE.menu;
+					} else if (Crystal.crystalsUsed()>=map.currentLevel.crystalsToWin()) {
+						if (map.isLastLevel()) {//if it's the last level then you win!
+							Console.s.clr();
+							Console.s.println("YOU WIN!");
+							Console.s.pause();
+							state=GAME_STATE.menu;
+							Crystal.set(0);//reset crystals used
+						} else {
+							p.setPos(new Point(0,5));//reset player position
+							Crystal.set(0);//reset crystals used
+							map.setLevel(map.getLvNo()+1);//go to next level if it isn't the last level
+						}
 					}
 					map.getCamera().location=p.getPos();
 					map.update();
@@ -179,11 +196,23 @@ public class App {
 					Console.s.clr();
 					map.drawMap(Console.s);
 					//write
-					Console.s.println("");
+					Console.s.println("Type ? for basic help.");
 					//input
 					Argument cmd=Argument.getArgs(Console.s.readLine());
 					//respond
 					switch (cmd.cmd()) {
+						case "?":
+							Console.s.println("To begin, use your Scroll of Grabbing.");
+							Console.s.println("The commands are case sensitive");
+							Console.s.println("");
+							Console.s.println("Commands:");
+							Console.s.println("use <item> - use an item (use quotes for item's that have names with spaces)");
+							Console.s.println("  ex: use \"Scroll of Grabbing\"");
+							Console.s.println("menu - return to main menu");
+							Console.s.println("save - save the game");
+							Console.s.println("exit - save the game");
+							Console.s.pause();
+						break;
 						case "exit":
 							state=GAME_STATE.exit;
 						break;
@@ -198,15 +227,21 @@ public class App {
 							}
 						break;
 						case "brincar":
+							int jumpAmount=3;
+							try {
+								jumpAmount=Integer.parseInt(cmd.get(2));
+							} catch (NumberFormatException e) {
+								
+							}
 							switch (cmd.get(1)) {
 								default:
-									p.jump(0);
+									p.jump(0,jumpAmount);
 								break;
 								case "right":
-									p.jump(1);
+									p.jump(1,jumpAmount);
 								break;
 								case "left":
-									p.jump(-1);
+									p.jump(-1,jumpAmount);
 								break;
 							}
 						break;
@@ -229,6 +264,9 @@ public class App {
 								amount=1;
 							}
 							p.getInventory().use(itemName, amount);
+						break;
+						case "menu":
+							state=GAME_STATE.menu;
 						break;
 						case "save":
 							save();
@@ -259,7 +297,7 @@ public class App {
 											p.attemptMove(new Point(p.getX()-1,p.getY()));
 										break;
 										case "up":
-											p.attemptMove(new Point(p.getX(),p.getY()+1));
+											p.attemptMove(new Point(p.getX(),p.getY()+2));
 										break;
 										case "down":
 											p.attemptMove(new Point(p.getX(),p.getY()-1));
@@ -279,16 +317,9 @@ public class App {
 	
 	public void save() {
 		String path="saves/"+p.getName()+"/";
-		try {
-			new File(path).createNewFile();
-			new File(path+"dat").createNewFile();
-			new File(path+"levels").createNewFile();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		new File(path+"levels").mkdir();
 		//save levels
-		map.saveLevels(path);
+		map.saveLevels(path+"levels");
 		
 		BufferedWriter writer;
 		try {
@@ -312,6 +343,10 @@ public class App {
 			writer.write(String.valueOf(p.getJumpHorizontalVelocity()));//ln 7
 			writer.newLine();
 			writer.write(String.valueOf(p.isJumping()));//ln 8
+			writer.newLine();
+			writer.write(String.valueOf(map.getLvNo()));//ln 9 - lv that the player is in
+			writer.newLine();
+			writer.write(String.valueOf(Crystal.crystalsUsed()));//ln 10 - no of crystals used
 			writer.newLine();
 			//player inventory
 			for (Item i:p.getInventory().getItems()) {

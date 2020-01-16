@@ -1,12 +1,14 @@
 package ascii.map;
 
 import ascii.App;
+import ascii.sprites.Crystal;
 import ascii.sprites.Item;
 import ascii.sprites.Sprite;
 import gameutil.text.Console;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -14,7 +16,7 @@ import java.util.Hashtable;
  *
  */
 public class Map {
-
+	int lvNo=0;
     ArrayList<Level> levels;
     //need to make these lists into hashtables for layers.
     private ArrayList<Sprite> screenSprites;
@@ -41,24 +43,21 @@ public class Map {
         setLevel(0);
     }
     
-    public Map(){
+    public Map(String path,int lvNo){
         levels=new ArrayList<>();
-        levels.add(Level.load("levels/1.lv"));
-		levels.add(Level.load("levels/2.lv"));
+        for (int i=1; i<3;i++) {
+        	Level loadedLevel=Level.load(path+"/"+i+".lv");
+        	if (!(loadedLevel==null)) {
+        		levels.add(loadedLevel);
+        	} else {
+        		levels.add(Level.load("levels/"+i+".lv"));
+        	}
+        }
         this.observer=null;
         camera=new Camera();
         lastCameraLocation=camera.location;
-        setLevel(1);
+        setLevel(lvNo);
         screenSprites=getSpritesOnScreen();
-    }
-
-    public Map(ArrayList<Level> levels){
-        this.levels=levels;
-        this.observer=null;
-        camera=new Camera();
-        lastCameraLocation=camera.location;
-        screenSprites=getSpritesOnScreen();
-        setLevel(0);
     }
 
     public void update(){
@@ -103,7 +102,9 @@ public class Map {
     			}
     		}
     		Console.s.println("");
+    		
     	}
+    	Console.s.println("Crystals Used: "+Crystal.crystalsUsed()+"/"+currentLevel.crystalsToWin());
     }
 
     /**Set the level by number
@@ -112,6 +113,7 @@ public class Map {
      */
     public void setLevel(int levelNo){
         currentLevel=levels.get(levelNo);
+        lvNo=levelNo;
     }
 
     /**Returns an array of all the sprites visible on the screen
@@ -200,7 +202,25 @@ public class Map {
     	return false;
     }
     
+    public int getLvNo() {
+    	return lvNo;
+    }
+    
+    public boolean isLastLevel() {
+    	return lvNo==levels.size()-1;
+    }
+    
     public void saveLevels(String path) {
     	//save levels
+    	for (Level l:levels) {
+    		try {
+				l.save(path+"/"+(levels.indexOf(l)+1)+".lv");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Console.s.println("An error occured while trying to save levels. Press any key to continue.");
+				Console.s.pause();
+			}
+    	}
     }
 }

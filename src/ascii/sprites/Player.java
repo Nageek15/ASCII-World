@@ -20,8 +20,8 @@ public class Player extends Sprite{
 	public Player(String name) {
 		super(name,'@',new Point(0,5),10);
 		i=new Inventory(this);
-		i.add(new Scroll("Scroll of Grabbing","This is a command scroll. These scrolls disappear from your inventory once you use them. They will tell you a list of things that you can type and what it will do.\n*note that \"\" are used for arguments (<argument>) that have spaces in them\n\ngrab - grab something\nuse <item> - use something"));
-		i.add(new Scroll("Scroll of Walking", "walk <left/right> - walk left or walk right"));
+		i.add(new Scroll("Scroll of Grabbing","This is a command scroll. They will tell you a list of things that you can type and what it will do.\n*note that \" \" are used for arguments (<argument>) that have spaces in them\n\nCommands:\ngrab - grab something"));
+		i.add(new Scroll("Scroll of Walking", "walk <left/right> - walk left or walk right\n  nex: walk right"));
 	}
 	
 	/**For loading from file
@@ -85,7 +85,7 @@ public class Player extends Sprite{
 	 * @param distance
 	 */
 	public void walk(int distance) {
-		//has to have solid below to push on to walk
+		//has to have solid below to push on to walk and yes; you can walk and jump at the same time as long as you have something under you.
 		if (App.map.solidAt(new Point(getX(),getY()-1))) {
 			attemptMove(new Point(getX()+distance,getY()));
 		}

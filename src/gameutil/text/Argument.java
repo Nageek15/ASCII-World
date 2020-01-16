@@ -100,7 +100,7 @@ public class Argument {
 	 * @return
 	 */
 	public static String encodeNewLine(String s) {
-		return s.replace("\n", "|/nl\\|");
+		return s.replace(" \n", " |/nl\\| ").replace("\n", " |/nl\\| ");
 	}
 	
 	/**-|/p\\| arg signifies that subsequent args are primitive

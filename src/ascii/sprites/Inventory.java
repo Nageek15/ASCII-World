@@ -68,7 +68,9 @@ public class Inventory {
 			}
 			if (i.name.equals(name)) {
 				if (use(i)) {
-					itemsToRemove.add(i);
+					if (i.consumable) {//only remove consumable items
+						itemsToRemove.add(i);
+					}
 					amountUsed++;
 				}
 			}
@@ -85,6 +87,7 @@ public class Inventory {
 		for (Item i:items) {
 			Console.s.println("   - ["+i.c+"]"+" "+i.name);
 			Console.s.println("       Usable: "+i.useable);
+			Console.s.println("       Consumable: "+i.consumable);
 			Console.s.println("       ");
 			Console.s.println("       "+i.desc);
 			Console.s.println("");
