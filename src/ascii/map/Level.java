@@ -17,7 +17,8 @@ public class Level {
     private ArrayList<Sprite> sprites;
     private Image background;
     private String path;
-
+    private int crystalsNeeded=0;
+    
     public Level(){
         //make a blank level
         sprites=new ArrayList<>();
@@ -51,10 +52,16 @@ public class Level {
     }
 
     public void save() throws IOException {
-        //save to path
-        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+        save(path);
 
-        for (Sprite s : sprites){
+    }
+    
+    public void save(String path) throws IOException {
+    	//save to path
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+        writer.write(String.valueOf(crystalsNeeded));//save crystals needed
+        writer.newLine();
+        for (Sprite s : sprites){ //save sprites
             writer.write("S "+s.getClass().getName()+" "+s.getProps());
             writer.newLine();
         }
@@ -88,10 +95,11 @@ public class Level {
         } catch (FileNotFoundException e) {
             //level is not saved, so keep the level the way it is and return
             System.out.println("No information to load for level at path: "+level.path);
-            return level;
+            return null;
         }
-        int line=0;
+        int line=1;
         try {
+        	level.crystalsNeeded=Integer.parseInt(reader.readLine());//set crystalls needed to win
             while (!read.equals("||")) {
                 read = reader.readLine();
                 Argument args=Argument.getArgs(read);
@@ -118,7 +126,7 @@ public class Level {
             //stop reading
             read="||";
         }
-        System.out.println("Loaded "+level.sprites.size()+" sprites for level "+level.path.substring(7));
+        System.out.println("Loaded "+level.sprites.size()+" sprites for level "+level.path);
         return level;
     }
 
@@ -136,5 +144,9 @@ public class Level {
 
     public ArrayList<Sprite> getSprites(){
         return sprites;
+    }
+    
+    public int crystalsToWin() {
+    	return crystalsNeeded;
     }
 }

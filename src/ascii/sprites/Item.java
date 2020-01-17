@@ -7,6 +7,7 @@ import gameutil.text.Console;
 public class Item extends Sprite{
 	protected boolean useable;
 	protected String desc;
+	protected boolean consumable=true;
 	
 	public Item() {
 		super('*',new Point(0,0),false);
@@ -61,19 +62,21 @@ public class Item extends Sprite{
 		this.useable=useable;
 	}
 	
-	public Item(String name,char c,Point pos,String desc,boolean useable,boolean inWorld) {
+	public Item(String name,char c,Point pos,String desc,boolean useable,boolean inWorld,boolean consumable) {
 		super(name,c,pos,false);
 		this.desc=desc;
 		this.useable=useable;
 		this.inWorld=inWorld;
+		this.consumable=consumable;
 	}
 	
 	public void use() {
 		Console.s.println("Nothing happens.");
 	}
+	
 	@Override
 	public String getProps() {
-		return "|/p\\| String |/l\\| "+name+" |/eS\\| char "+c+" |/o\\| java.awt.Point |/p\\| int "+getX()+" int "+getY()+" |/e1\\| String |/l\\| "+desc+" |/eS\\| boolean "+String.valueOf(useable)+" boolean "+String.valueOf(inWorld);
+		return "|/p\\| String |/l\\| "+name+" |/eS\\| char "+c+" |/o\\| java.awt.Point |/p\\| int "+getX()+" int "+getY()+" |/e1\\| String |/l\\| "+desc+" |/eS\\| boolean "+String.valueOf(useable)+" boolean "+String.valueOf(inWorld)+" boolean "+String.valueOf(consumable);
 	}
 
 }

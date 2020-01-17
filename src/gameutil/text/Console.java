@@ -48,8 +48,9 @@ public class Console {
 		userNextLineEnabled = false;
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
-				(Toolkit.getDefaultToolkit().getScreenSize().height / 3)));
+		//frame.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width / 2,(Toolkit.getDefaultToolkit().getScreenSize().height / 3)));
+		frame.setTitle("ASCII World");
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.pack();
 		field = new JTextArea();
 		field.setEditable(false);
@@ -66,7 +67,7 @@ public class Console {
 		frame.add(scrollPane);
 		
 		frame.setVisible(true);
-		frame.setLocationRelativeTo(null);
+		//frame.setLocationRelativeTo(null);
 		field.addFocusListener(new FocusListener() {
 			private boolean init=!initialized;
 			
@@ -646,6 +647,7 @@ public class Console {
 	}
 	
 	public void pause() {
+		println("Press any key to continue...");// wasn't going to include this but got some feedback about people not knowing what to do
 		keylistener.Pause();
 	}
 

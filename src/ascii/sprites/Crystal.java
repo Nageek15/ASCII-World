@@ -25,7 +25,7 @@ public class Crystal extends Item{
 		return crystalsUsed;
 	}
 	
-	public static void reset() {
+	public static void set(int n) {
 		crystalsUsed=0;
 	}
 	

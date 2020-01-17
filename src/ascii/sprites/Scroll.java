@@ -10,13 +10,13 @@ public class Scroll extends Item{
 	String contents;
 	
 	public Scroll(String name,Point pos,String contents) {
-		super(name,'ƒ',pos,"It says some stuff...",true,true);
+		super(name,'ƒ',pos,"It says some stuff...",true,true,false);
 		space=true;
 		this.contents=contents;
 	}
 	
 	public Scroll(String name, String contents) {
-		super(name,'ƒ',new Point(0,0),"It says some stuff...",true,false);
+		super(name,'ƒ',new Point(0,0),"It says some stuff...",true,false,false);
 		space=true;
 		this.contents=contents;
 	}
