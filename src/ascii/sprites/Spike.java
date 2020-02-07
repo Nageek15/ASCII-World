@@ -1,5 +1,10 @@
 package ascii.sprites;
 
+import java.awt.Point;
+
 public class Spike extends Sprite{
-	//do this later
+	public Spike(Point pos) {
+		super('x',pos);
+		solid=false;
+	}
 }

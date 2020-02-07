@@ -185,6 +185,23 @@ public class Map {
     	return false;
     }
     
+    public boolean spriteAt(Point pos,char c) {
+    	if (camera.getArea().contains(pos)) {
+    		for (Sprite s:screenSprites) {
+    			if (s.getPos().distance(pos)==0&&s.getChar()==c) {
+    				return true;
+    			}
+    		}
+    	} else {
+    		for (Sprite s:currentLevel.getSprites()) {
+    			if (s.getPos().distance(pos)==0) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
     public boolean solidAt(Point pos) {
     	if (camera.getArea().contains(pos)) {
     		for (Sprite s:screenSprites) {

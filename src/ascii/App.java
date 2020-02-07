@@ -22,9 +22,10 @@ import gameutil.text.Console;
 
 public class App {
 	public static Map map;
-	private enum GAME_STATE {menu,intro,load,inGame,exit};
+	private enum GAME_STATE {menu,intro,load,inGame,edit,exit};
 	private GAME_STATE state=GAME_STATE.menu;
 	public static Player p;
+	public static Sounds sound=new Sounds();
 	
 	//Always gotta have that unicorns array of Strings which are arguments applied to the command to run the jar.
 	public static void main(String[] unicorns) {
@@ -32,8 +33,10 @@ public class App {
 	}
 	
 	public App() {
+		sound.setSourcePath("music/");
 		Console.s.setTheme(Console.theme.pink);
 		Console.s.print("");
+		sound.playSoundOnLoop("Track.wav", 1);
 		while (state!=GAME_STATE.exit) {
 			switch (state) {
 				case menu:
@@ -58,6 +61,9 @@ public class App {
 						}
 					} else if (choice.equals("exit")){
 						state=GAME_STATE.exit;
+					} else if (choice.equals("edit the yams")) {
+						map=new Map("levels",0);
+						state=GAME_STATE.edit;
 					}
 				break;
 				case load:
@@ -309,6 +315,42 @@ public class App {
 					
 					
 				break;
+				case edit:
+					map.getCamera().location=p.getPos();
+					map.update();
+					
+					//draw
+					Console.s.clr();
+					map.drawMap(Console.s);
+					//write
+					Console.s.println("Type ? for basic help.");
+					//input
+					cmd=Argument.getArgs(Console.s.readLine());
+					//respond
+					switch (cmd.cmd()){
+						case "right":
+							p.attemptMove(new Point(p.getX()+1,p.getY()));
+						break;
+						case "left":
+							p.attemptMove(new Point(p.getX()-1,p.getY()));
+						break;
+						case "up":
+							p.attemptMove(new Point(p.getX(),p.getY()+2));
+						break;
+						case "down":
+							p.attemptMove(new Point(p.getX(),p.getY()-1));
+						break;
+						case "exit":
+							state=GAME_STATE.exit;
+						break;
+						case "menu":
+							state=GAME_STATE.menu;
+						break;
+						case "save":
+							save();
+						break;
+					}
+				break;
 			}
 		}
 		
@@ -362,6 +404,10 @@ public class App {
 			
 			
         
+	}
+	
+	public void saveLevel() {
+		
 	}
 
 }

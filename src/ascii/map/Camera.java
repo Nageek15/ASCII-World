@@ -42,7 +42,7 @@ public class Camera {
         this.observer=null;
         location=new Point(0,0);
         screenPos=new Point(0,0);
-        setScreenArea(16,10);
+        setScreenArea(32,20);
         //AreaMode.init();
     }
 

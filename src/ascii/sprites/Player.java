@@ -21,7 +21,7 @@ public class Player extends Sprite{
 		super(name,'@',new Point(0,5),10);
 		i=new Inventory(this);
 		i.add(new Scroll("Scroll of Grabbing","This is a command scroll. They will tell you a list of things that you can type and what it will do.\n*note that \" \" are used for arguments (<argument>) that have spaces in them\n\nCommands:\ngrab - grab something"));
-		i.add(new Scroll("Scroll of Walking", "walk <left/right> - walk left or walk right\n  nex: walk right"));
+		i.add(new Scroll("Scroll of Walking", "walk <left/right> - walk left or walk right\n  ex: walk right"));
 	}
 	
 	/**For loading from file
@@ -65,6 +65,7 @@ public class Player extends Sprite{
 				
 			}
 		}
+		
 	}
 	
 	@Override
@@ -77,6 +78,10 @@ public class Player extends Sprite{
 			}
 		} else {
 			attemptMove(new Point(getX(),getY()-1));
+		}
+		
+		if (App.map.spriteAt(pos, 'x')) {
+			inWorld=false;//sprite kills player
 		}
 	}
 	
