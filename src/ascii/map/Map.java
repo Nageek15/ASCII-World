@@ -7,6 +7,8 @@ import ascii.sprites.Sprite;
 import gameutil.text.Console;
 
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +47,9 @@ public class Map {
     
     public Map(String path,int lvNo){
         levels=new ArrayList<>();
-        for (int i=1; i<3;i++) {
+        java.io.File f=new java.io.File("levels");
+        
+        for (int i=1; i<=f.list().length;i++) {
         	Level loadedLevel=Level.load(path+"/"+i+".lv");
         	if (!(loadedLevel==null)) {
         		levels.add(loadedLevel);
@@ -112,8 +116,16 @@ public class Map {
      * @param levelNo
      */
     public void setLevel(int levelNo){
-        currentLevel=levels.get(levelNo);
-        lvNo=levelNo;
+    	try {
+    		currentLevel=levels.get(levelNo);
+    		lvNo=levelNo;
+    	} catch (IndexOutOfBoundsException e) {
+    		JOptionPane.showMessageDialog(null, "Level "+levelNo+" not found.","Error",JOptionPane.ERROR_MESSAGE);
+    	}
+    }
+    
+    public void newLevel(int no) {
+    	levels.add(new Level("levels/"+no+"lv"));
     }
 
     /**Returns an array of all the sprites visible on the screen
@@ -202,6 +214,26 @@ public class Map {
     	return false;
     }
     
+    public Sprite[] spritesAt(Point pos) {
+    	ArrayList<Sprite> sprites = new ArrayList<>();
+    	if (camera.getArea().contains(pos)) {
+    		for (Sprite s:screenSprites) {
+    			if (s.getPos().distance(pos)==0) {
+    				sprites.add(s);
+    			}
+    		}
+    	} else {
+    		for (Sprite s:currentLevel.getSprites()) {
+    			if (s.getPos().distance(pos)==0) {
+    				sprites.add(s);
+    			}
+    		}
+    	}
+    	Sprite[] a = new Sprite[sprites.size()];
+    	sprites.toArray(a);
+    	return a;
+    }
+    
     public boolean solidAt(Point pos) {
     	if (camera.getArea().contains(pos)) {
     		for (Sprite s:screenSprites) {
@@ -239,5 +271,15 @@ public class Map {
 				Console.s.pause();
 			}
     	}
+    }
+    
+    public void removeSprites(Sprite[] sprites) {
+    	for (Sprite s:sprites) {
+    		currentLevel.getSprites().remove(s);
+    	}
+    }
+    
+    public int levelNo() {
+    	return levels.size();
     }
 }

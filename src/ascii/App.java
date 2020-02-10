@@ -16,6 +16,8 @@ import ascii.sprites.Block;
 import ascii.sprites.Crystal;
 import ascii.sprites.Item;
 import ascii.sprites.Player;
+import ascii.sprites.Scroll;
+import ascii.sprites.Spike;
 import ascii.sprites.Sprite;
 import gameutil.text.Argument;
 import gameutil.text.Console;
@@ -63,6 +65,8 @@ public class App {
 						state=GAME_STATE.exit;
 					} else if (choice.equals("edit the yams")) {
 						map=new Map("levels",0);
+						p=new Player("Keegan");
+						Console.s.setUserNextLineEnabled(true);
 						state=GAME_STATE.edit;
 					}
 				break;
@@ -303,11 +307,18 @@ public class App {
 											p.attemptMove(new Point(p.getX()-1,p.getY()));
 										break;
 										case "up":
-											p.attemptMove(new Point(p.getX(),p.getY()+2));
+											p.attemptMove(new Point(p.getX(),p.getY()+1));
 										break;
 										case "down":
 											p.attemptMove(new Point(p.getX(),p.getY()-1));
 										break;
+									}
+								break;
+								case "test yams":
+									try {
+										map.setLevel(Integer.parseInt(cmd.get(2)));
+									} catch (Exception e) {
+										
 									}
 								break;
 							}
@@ -323,34 +334,105 @@ public class App {
 					Console.s.clr();
 					map.drawMap(Console.s);
 					//write
+					Console.s.println("Current level: "+map.getLvNo());
 					Console.s.println("Type ? for basic help.");
 					//input
 					cmd=Argument.getArgs(Console.s.readLine());
 					//respond
 					switch (cmd.cmd()){
 						case "right":
-							p.attemptMove(new Point(p.getX()+1,p.getY()));
+							p.setPos(new Point(p.getX()+1,p.getY()));
 						break;
 						case "left":
-							p.attemptMove(new Point(p.getX()-1,p.getY()));
+							p.setPos(new Point(p.getX()-1,p.getY()));
 						break;
 						case "up":
-							p.attemptMove(new Point(p.getX(),p.getY()+2));
+							p.setPos(new Point(p.getX(),p.getY()+1));
 						break;
 						case "down":
-							p.attemptMove(new Point(p.getX(),p.getY()-1));
+							p.setPos(new Point(p.getX(),p.getY()-1));
 						break;
 						case "exit":
 							state=GAME_STATE.exit;
 						break;
 						case "menu":
 							state=GAME_STATE.menu;
+							Console.s.setUserNextLineEnabled(false);
 						break;
 						case "save":
-							save();
+							saveLevels();
+						break;
+						case "open":
+							int no=0;
+							try {
+								no=Integer.parseInt(cmd.get(1));
+							} catch (Exception e) {
+								
+							}
+							map.setLevel(no);
+							p.setPos(new Point(0,5));//reset player position
+						break;
+						case "new":
+							no=map.levelNo();
+							map.newLevel(no);
+							map.setLevel(no);
+							p.setPos(new Point(0,5));//reset player position
+						break;
+						case "goal":
+							try {
+								no=Integer.parseInt(cmd.get(1));
+							} catch (Exception e) {
+								no=0;
+							}
+							Map.getCurrentLevel().setCrystalsToWin(no);
+						break;
+						case "del":
+							map.removeSprites(map.spritesAt(p.getPos()));//deletes all sprites at player's current location
+						break;
+						
+						case "p"://place a block
+							switch (cmd.get(1)) {
+								case "block":
+									Map.getCurrentLevel().add(new Block(p.getPos()));
+								break;
+								case "scroll":
+									name="null";
+									String contents="null";
+									if (!cmd.get(2).equals("")) {
+										name=cmd.get(2);
+									}
+									if (!cmd.get(3).equals("")) {
+										contents=cmd.get(3);
+									}
+									Map.getCurrentLevel().add(new Scroll(name,p.getPos(),contents));
+								break;
+								case "crystal":
+									Map.getCurrentLevel().add(new Crystal(p.getPos()));
+								break;
+								case "spike":
+									Map.getCurrentLevel().add(new Spike(p.getPos()));
+								break;
+							}
+						break;
+						case "?":
+							Console.s.println("right - move right");
+							Console.s.println("left - move left");
+							Console.s.println("up - move up");
+							Console.s.println("down - move down");
+							Console.s.println("open <lvno> - open level <lvno>");
+							Console.s.println("new - make a new level");
+							Console.s.println("p <sprite> - place a sprite (e.g. 'crystal', 'spike', or 'block'");
+							Console.s.println("p scroll <name> <contentents> - place a scroll with specified name and contents");
+							Console.s.println("save - saves all levels in their current state");
+							Console.s.println("del - delete all sprites under you");
+							Console.s.println("goal <no> - set crystals needed for current level");
+							Console.s.println("menu - return to menu");
+							Console.s.println("exit - exit game");
+							Console.s.pause();
 						break;
 					}
 				break;
+				
 			}
 		}
 		
@@ -361,7 +443,7 @@ public class App {
 		String path="saves/"+p.getName()+"/";
 		new File(path+"levels").mkdir();
 		//save levels
-		map.saveLevels(path+"levels");
+		map.saveLevels("levels");
 		
 		BufferedWriter writer;
 		try {
@@ -406,8 +488,11 @@ public class App {
         
 	}
 	
-	public void saveLevel() {
-		
+	public void saveLevels() {
+		String path="levels/";
+		new File(path).mkdir();
+		//save levels
+		map.saveLevels(path);
 	}
 
 }

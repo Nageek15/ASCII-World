@@ -1,0 +1,4 @@
+1
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 0 int 4 |/e1\|
+S ascii.sprites.Crystal |/o\| java.awt.Point |/p\| int 0 int 8 |/e1\|
+||

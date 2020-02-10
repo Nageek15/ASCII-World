@@ -99,7 +99,7 @@ public class Level {
         }
         int line=1;
         try {
-        	level.crystalsNeeded=Integer.parseInt(reader.readLine());//set crystalls needed to win
+        	level.crystalsNeeded=Integer.parseInt(reader.readLine());//set crystals needed to win
             while (!read.equals("||")) {
                 read = reader.readLine();
                 Argument args=Argument.getArgs(read);
@@ -148,5 +148,9 @@ public class Level {
     
     public int crystalsToWin() {
     	return crystalsNeeded;
+    }
+    
+    public void setCrystalsToWin(int no) {
+    	crystalsNeeded=no;
     }
 }

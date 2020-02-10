@@ -6,5 +6,6 @@ public class Spike extends Sprite{
 	public Spike(Point pos) {
 		super('x',pos);
 		solid=false;
+		space=true;
 	}
 }
