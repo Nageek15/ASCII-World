@@ -14,6 +14,7 @@ import java.util.Arrays;
 import ascii.map.Map;
 import ascii.sprites.Block;
 import ascii.sprites.Crystal;
+import ascii.sprites.Enemy;
 import ascii.sprites.Item;
 import ascii.sprites.Player;
 import ascii.sprites.Scroll;
@@ -28,6 +29,7 @@ public class App {
 	private GAME_STATE state=GAME_STATE.menu;
 	public static Player p;
 	public static Sounds sound=new Sounds();
+	private boolean music=true;
 	
 	//Always gotta have that unicorns array of Strings which are arguments applied to the command to run the jar.
 	public static void main(String[] unicorns) {
@@ -39,6 +41,7 @@ public class App {
 		Console.s.setTheme(Console.theme.pink);
 		Console.s.print("");
 		sound.playSoundOnLoop("Track.wav", 1);
+		toggleMusic();
 		while (state!=GAME_STATE.exit) {
 			switch (state) {
 				case menu:
@@ -68,6 +71,9 @@ public class App {
 						p=new Player("Keegan");
 						Console.s.setUserNextLineEnabled(true);
 						state=GAME_STATE.edit;
+						map.setEditMode(true);
+					} else if (choice.equals("music")) {
+						toggleMusic();
 					}
 				break;
 				case load:
@@ -206,6 +212,7 @@ public class App {
 					Console.s.clr();
 					map.drawMap(Console.s);
 					//write
+					Console.s.println("HP: "+p.getHealth()+"/"+p.getMaxHealth());
 					Console.s.println("Type ? for basic help.");
 					//input
 					Argument cmd=Argument.getArgs(Console.s.readLine());
@@ -292,8 +299,42 @@ public class App {
 							Console.s.println(p.getName()+", you too.");
 							Console.s.pause();
 						break;
+						case "fuck":
+							Console.s.println("Daniah stop swearing please.");
+							Console.s.println(p.getName()+", you too.");
+							Console.s.pause();
+						break;
+						case "shit":
+							Console.s.println("Daniah stop swearing please.");
+							Console.s.println(p.getName()+", you too.");
+							Console.s.pause();
+						break;
+						case "ass":
+							Console.s.println("Daniah stop swearing please.");
+							Console.s.println(p.getName()+", you too.");
+							Console.s.pause();
+						break;
+						case "follate":
+							Console.s.println("Daniah stop swearing please.");
+							Console.s.println(p.getName()+", you too.");
+							Console.s.pause();
+						break;
+						case "flapdoodle":
+							Console.s.println("Daniah stop swearing please.");
+							Console.s.println(p.getName()+", you too.");
+							Console.s.pause();
+						break;
+						case "mierda":
+							Console.s.println("Daniah stop swearing please.");
+							Console.s.println(p.getName()+", you too.");
+							Console.s.pause();
+						break;
 						case "fly":
 							Console.s.println("No.");
+							Console.s.pause();
+						break;
+						case "platitudinous":
+							Console.s.println("That's a good word.");
 							Console.s.pause();
 						break;
 						case "spell":
@@ -322,6 +363,10 @@ public class App {
 									}
 								break;
 							}
+						break;
+						case "music":
+							toggleMusic();
+						break;
 					}
 					
 					
@@ -340,17 +385,41 @@ public class App {
 					cmd=Argument.getArgs(Console.s.readLine());
 					//respond
 					switch (cmd.cmd()){
-						case "right":
-							p.setPos(new Point(p.getX()+1,p.getY()));
+						case "d":
+							int no=1;
+							try {
+								no=Integer.parseInt(cmd.get(1));
+							} catch (Exception e) {
+								
+							}
+							p.setPos(new Point(p.getX()+no,p.getY()));
 						break;
-						case "left":
-							p.setPos(new Point(p.getX()-1,p.getY()));
+						case "a":
+							no=1;
+							try {
+								no=Integer.parseInt(cmd.get(1));
+							} catch (Exception e) {
+								
+							}
+							p.setPos(new Point(p.getX()-no,p.getY()));
 						break;
-						case "up":
-							p.setPos(new Point(p.getX(),p.getY()+1));
+						case "w":
+							no=1;
+							try {
+								no=Integer.parseInt(cmd.get(1));
+							} catch (Exception e) {
+								
+							}
+							p.setPos(new Point(p.getX(),p.getY()+no));
 						break;
-						case "down":
-							p.setPos(new Point(p.getX(),p.getY()-1));
+						case "s":
+							no=1;
+							try {
+								no=Integer.parseInt(cmd.get(1));
+							} catch (Exception e) {
+								
+							}
+							p.setPos(new Point(p.getX(),p.getY()-no));
 						break;
 						case "exit":
 							state=GAME_STATE.exit;
@@ -363,7 +432,7 @@ public class App {
 							saveLevels();
 						break;
 						case "open":
-							int no=0;
+							no=0;
 							try {
 								no=Integer.parseInt(cmd.get(1));
 							} catch (Exception e) {
@@ -412,13 +481,22 @@ public class App {
 								case "spike":
 									Map.getCurrentLevel().add(new Spike(p.getPos()));
 								break;
+								case "enemy":
+									Map.currentLevel.add(new Enemy(p.getPos()));
 							}
 						break;
+						
+						case "time":
+							map.toggleEditMode();
+						break;
+						case "music":
+							toggleMusic();
+						break;
 						case "?":
-							Console.s.println("right - move right");
-							Console.s.println("left - move left");
-							Console.s.println("up - move up");
-							Console.s.println("down - move down");
+							Console.s.println("d - move right");
+							Console.s.println("a - move left");
+							Console.s.println("w - move up");
+							Console.s.println("s - move down");
 							Console.s.println("open <lvno> - open level <lvno>");
 							Console.s.println("new - make a new level");
 							Console.s.println("p <sprite> - place a sprite (e.g. 'crystal', 'spike', or 'block'");
@@ -426,6 +504,8 @@ public class App {
 							Console.s.println("save - saves all levels in their current state");
 							Console.s.println("del - delete all sprites under you");
 							Console.s.println("goal <no> - set crystals needed for current level");
+							Console.s.println("music - toggle music");
+							Console.s.println("time - freeze/unfreeze time");
 							Console.s.println("menu - return to menu");
 							Console.s.println("exit - exit game");
 							Console.s.pause();
@@ -441,9 +521,11 @@ public class App {
 	
 	public void save() {
 		String path="saves/"+p.getName()+"/";
+		new File("saves").mkdir();
+		new File(path).mkdir();
 		new File(path+"levels").mkdir();
 		//save levels
-		map.saveLevels("levels");
+		map.saveLevels(path+"levels");
 		
 		BufferedWriter writer;
 		try {
@@ -493,6 +575,15 @@ public class App {
 		new File(path).mkdir();
 		//save levels
 		map.saveLevels(path);
+	}
+	
+	public void toggleMusic() {
+		music=!music;
+		if (!music) {
+			sound.pauseSound("Track.wav");
+		} else {
+			sound.resumeSound("Track.wav");
+		}
 	}
 
 }

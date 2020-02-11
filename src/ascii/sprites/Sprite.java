@@ -161,7 +161,7 @@ public class Sprite {
     * @return
     */
    public String getProps() {
-		return "String this.getClass().getTypeName() char - ";
+		return "String "+this.getClass().getTypeName()+" char - ";
 	}
    
    public int getX() {

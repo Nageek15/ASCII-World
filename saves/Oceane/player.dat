@@ -1,0 +1,16 @@
+Oceane
+7
+4
+10
+10
+0
+3
+1
+false
+3
+0
+I ascii.sprites.Scroll String |/l\| Scroll of Grabbing |/eS\| |/o\| java.awt.Point |/p\| int 0 int 0 |/e1\| |/p\| String |/l\| This is a command scroll. They will tell you a list of things that you can type and what it will do. |/nl\| *note that |/eS\|
+I ascii.sprites.Scroll String |/l\| Scroll of Walking |/eS\| |/o\| java.awt.Point |/p\| int 0 int 0 |/e1\| |/p\| String |/l\| walk <left/right> - walk left or walk right |/nl\|  |/eS\|
+I ascii.sprites.Scroll String |/l\| Scroll of Jumping II |/eS\| |/o\| java.awt.Point |/p\| int 28 int 13 |/e1\| |/p\| String |/l\| Commands: |/nl\| brincar <left/right> <amount> - jump left or right a certain distance (max 3) |/eS\|
+I ascii.sprites.Crystal 
+|i|

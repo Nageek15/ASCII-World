@@ -26,6 +26,7 @@ public class Map {
     private static Camera camera;
     Point lastCameraLocation;
     JPanel observer;
+    boolean editMode=false;
 
     public Map(JPanel observer){
         levels=new ArrayList<>();
@@ -66,7 +67,9 @@ public class Map {
 
     public void update(){
         //update the current level
-        currentLevel.update();
+    	if (!editMode) {
+    		currentLevel.update();
+    	}
         camera.update();
         screenSprites=getSpritesOnScreen();
     }
@@ -281,5 +284,12 @@ public class Map {
     
     public int levelNo() {
     	return levels.size();
+    }
+    
+    public void setEditMode(boolean editMode) {
+    	this.editMode=editMode;
+    }
+    public void toggleEditMode() {
+    	editMode=!editMode;
     }
 }

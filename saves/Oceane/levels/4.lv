@@ -1,0 +1,30 @@
+2
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 0 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -2 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -3 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -4 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -5 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -6 int 4 |/e1\|
+S ascii.sprites.Enemy |/o\| java.awt.Point |/p\| int -8 int 4 |/e1\| |/p\| boolean false
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -7 int 3 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -8 int 3 |/e1\|
+S ascii.sprites.Spike |/o\| java.awt.Point |/p\| int -8 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -9 int 3 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -10 int 3 |/e1\|
+S ascii.sprites.Enemy |/o\| java.awt.Point |/p\| int -10 int 4 |/e1\| |/p\| boolean false
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -11 int 3 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -12 int 3 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -13 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -13 int 3 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -6 int 3 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -1 int 2 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 1 int 2 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 4 int 2 |/e1\|
+S ascii.sprites.Enemy |/o\| java.awt.Point |/p\| int 4 int -42 |/e1\| |/p\| boolean false
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 7 int 3 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 1 int 4 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 1 int 5 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 1 int 6 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 1 int 7 |/e1\|
+S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 1 int 8 |/e1\|
+||

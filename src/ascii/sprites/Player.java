@@ -83,6 +83,12 @@ public class Player extends Sprite{
 		if (App.map.spriteAt(pos, 'x')) {
 			inWorld=false;//sprite kills player
 		}
+		if (App.map.spriteAt(pos, '#')){
+			hp--;
+		}
+		if (hp<=0) {
+			inWorld=false;
+		}
 	}
 	
 	/**Walk sideways.

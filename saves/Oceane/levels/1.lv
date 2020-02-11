@@ -33,9 +33,6 @@ S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 5 int 5 |/e1\|
 S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 6 int 5 |/e1\|
 S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 7 int 5 |/e1\|
 S ascii.sprites.Block |/o\| java.awt.Point |/p\| int 8 int 5 |/e1\|
-S ascii.sprites.Crystal |/o\| java.awt.Point |/p\| int 6 int 6 |/e1\|
-S ascii.sprites.Crystal |/o\| java.awt.Point |/p\| int 7 int 6 |/e1\|
-S ascii.sprites.Scroll String |/l\| Scroll of Inventory |/eS\| |/o\| java.awt.Point |/p\| int 0 int 5 |/e1\| |/p\| String |/l\| Commands: |/nl\| inv - show inventory |/eS\|
 S ascii.sprites.Scroll String |/l\| Scroll of Jumping |/eS\| |/o\| java.awt.Point |/p\| int -12 int 5 |/e1\| |/p\| String |/l\| Commands: |/nl\| brincar - jump up |/nl\| brincar <left/right> - jump left or jump right |/eS\|
 S ascii.sprites.Block |/o\| java.awt.Point |/p\| int -17 int 5 |/e1\|
 S ascii.sprites.Spike |/o\| java.awt.Point |/p\| int -18 int 4 |/e1\|

@@ -8,4 +8,8 @@ public class Spike extends Sprite{
 		solid=false;
 		space=true;
 	}
+	
+	public String getProps() {
+		return "|/o\\| java.awt.Point |/p\\| int "+pos.x+" int "+pos.y+" |/e1\\|";
+	}
 }
