@@ -141,4 +141,6 @@ public class Player extends Sprite{
 		return jumping;
 	}
 	
+	
+	
 }

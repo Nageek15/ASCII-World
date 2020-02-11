@@ -179,5 +179,9 @@ public class Sprite {
    public boolean inWorld() {
 	   return inWorld;
    }
+   
+   public void damage(int no) {
+		hp-=no;
+	}
 	
 }
