@@ -23,6 +23,12 @@ public class VectorR2 extends LineSegR2 {
 		mX=v.getSpds().i(0);
 		mY=v.getSpds().i(1);
 	}
+	
+	public VectorR2(double mX,double mY) throws Exception {
+		super(0, 0, mX, mY);
+		this.mX=mX;
+		this.mY=mY;
+	}
 
 	public PointR2 base() {
 		return new PointR2(x1, y1);

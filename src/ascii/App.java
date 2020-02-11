@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 import ascii.map.Map;
 import ascii.sprites.Block;
+import ascii.sprites.Bullet;
 import ascii.sprites.Crystal;
 import ascii.sprites.Enemy;
 import ascii.sprites.Item;
@@ -20,6 +21,7 @@ import ascii.sprites.Player;
 import ascii.sprites.Scroll;
 import ascii.sprites.Spike;
 import ascii.sprites.Sprite;
+import gameutil.geom.g2D.VectorR2;
 import gameutil.text.Argument;
 import gameutil.text.Console;
 
@@ -336,6 +338,57 @@ public class App {
 						case "platitudinous":
 							Console.s.println("That's a good word.");
 							Console.s.pause();
+						break;
+						case "shoot":
+							boolean add=false;
+							VectorR2 velocity=null;
+							Point pos=null;
+							switch (cmd.get(1)) {
+								case "left":
+									try {
+										velocity=new VectorR2(-1,0);
+									} catch (Exception e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+									pos=new Point(p.getPos().x-1,p.getPos().y);
+									add=true;
+								break;
+								case "right":
+									try {
+										velocity=new VectorR2(1,0);
+									} catch (Exception e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+									pos=new Point(p.getPos().x+1,p.getPos().y);
+									add=true;
+								break;
+								case "up":
+									try {
+										velocity=new VectorR2(0,1);
+									} catch (Exception e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+									pos=new Point(p.getPos().x,p.getPos().y+1);
+									add=true;
+								break;
+								case "down":
+									try {
+										velocity=new VectorR2(0,-1);
+									} catch (Exception e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+									pos=new Point(p.getPos().x,p.getPos().y-1);
+									add=true;
+								break;
+								
+							}
+							if (add) {
+								Map.getCurrentLevel().add(new Bullet(new Point(p.getPos()),velocity,1));
+							}
 						break;
 						case "spell":
 							switch (cmd.get(1)){

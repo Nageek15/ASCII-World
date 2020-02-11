@@ -181,6 +181,9 @@ public class Sprite {
    }
    
    public void damage(int no) {
+	   if (maxhp<=0) {
+		   return;
+	   }
 		hp-=no;
 	}
 	

@@ -20,6 +20,7 @@ public class Enemy extends Sprite{
 	
 	@Override
 	public void update() {
+		
 		attemptMove(new Point(pos.x,pos.y-1));
 		//patrol platform
 		if (App.p.getPos().distance(pos)<=1) {
