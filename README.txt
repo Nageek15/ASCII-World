@@ -21,3 +21,5 @@ The Face-Scott
 The Support- Willson Talent Center: Programming class of 2020
 
 P.S. Don't question the jumping physics. It's very normal in ASCII World. DON'T QUESTION IT!
+
+P.P.S. Feel free to edit the yams.
