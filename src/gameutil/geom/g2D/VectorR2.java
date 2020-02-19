@@ -41,7 +41,7 @@ public class VectorR2 extends LineSegR2 {
 	public PointR2 intersection(Rectangle r) {
 		if (intersects(r)) {
 			if (r.contains(base().getX(), base().getY()) && r.contains(end().getX(), end().getY())) {
-				return null;
+				return base();
 			} else if (r.contains(base().getX(), base().getY())) {
 				LineSegR2[] segments = LineSegR2.rectToLineSegs(r);
 				for (LineSegR2 l : segments) {
@@ -67,6 +67,53 @@ public class VectorR2 extends LineSegR2 {
 						}
 					}
 				}
+				PointR2 closest = points.get(0);
+				for (PointR2 p : points) {
+					if (p.distance(base()) > closest.distance(base())) {
+						closest = p;
+					}
+				}
+				return closest;
+			}
+
+		}
+		return null;
+	}
+	
+	public PointR2 intersection(RectangleR2 r) {
+		if (intersects(r)) {
+			if (r.contains(base()) && r.contains(end())) {
+				return null;
+			} else if (r.contains(base())) {
+				LineSegR2[] segments = LineSegR2.rectToLineSegs(r);
+				for (LineSegR2 l : segments) {
+					if (intersects(l)) {
+						try {
+							return intersection(l);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			} else {
+				LineSegR2[] segments = LineSegR2.rectToLineSegs(r);
+				ArrayList<PointR2> points = new ArrayList<>();
+				int i=0;
+				for (LineSegR2 l : segments) {
+					i++;
+					
+					if (intersects(l)) {
+						System.out.println("adding point");
+						try {
+							points.add(intersection(l));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				System.out.println(i+" segments");
 				PointR2 closest = points.get(0);
 				for (PointR2 p : points) {
 					if (p.distance(base()) > closest.distance(base())) {

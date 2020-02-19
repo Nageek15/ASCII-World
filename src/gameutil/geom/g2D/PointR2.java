@@ -1,5 +1,6 @@
 package gameutil.geom.g2D;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 
 import gameutil.geom.Vector;
@@ -12,6 +13,11 @@ public class PointR2 {
 	public PointR2(double x, double y) {
 		this.x = x;
 		this.y = y;
+	}
+
+	public PointR2(Point pos) {
+		x = pos.getX();
+		y = pos.getY();
 	}
 
 	public double distance(PointR2 p) {

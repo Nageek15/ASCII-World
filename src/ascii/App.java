@@ -32,6 +32,7 @@ public class App {
 	public static Player p;
 	public static Sounds sound=new Sounds();
 	private boolean music=true;
+	private boolean fp=false;
 	
 	//Always gotta have that unicorns array of Strings which are arguments applied to the command to run the jar.
 	public static void main(String[] unicorns) {
@@ -212,7 +213,11 @@ public class App {
 					
 					//draw
 					Console.s.clr();
-					map.drawMap(Console.s);
+					if (fp) {
+						map.drawMapFP(Console.s);
+					} else {
+						map.drawMap(Console.s);
+					}
 					//write
 					Console.s.println("HP: "+p.getHealth()+"/"+p.getMaxHealth());
 					Console.s.println("Type ? for basic help.");
@@ -419,6 +424,12 @@ public class App {
 						break;
 						case "music":
 							toggleMusic();
+						break;
+						case "fp":
+							fp=!fp;
+						break;
+						case "turn":
+							p.turn();
 						break;
 					}
 					

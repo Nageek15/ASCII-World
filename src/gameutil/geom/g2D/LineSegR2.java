@@ -31,7 +31,7 @@ public class LineSegR2 extends LineR2 {
 	
 
 	public boolean intersects(LineR2 l) {
-		System.out.println("Line seg intersects line?");
+		//System.out.println("Line seg intersects line?");
 		try {
 			if (new LineR2(p1,p2).intersects(l)) {
 				System.out.println(new LineR2(p1,p2).intersects(l));
@@ -56,14 +56,16 @@ public class LineSegR2 extends LineR2 {
 	}
 
 	public boolean intersects(LineSegR2 l) {
-		System.out.println("Line seg intersects line seg?");
+		//System.out.println("Line seg intersects line seg?");
 		try {
 			if (new LineR2(p1,p2).intersects(l)) {
 				PointR2 intsct = null;
 				try {
 					intsct = new LineR2(p1,p2).intersection(l);
-				} catch (Exception e) {
+				} catch (NoIntersectionException e) {
 					return false;
+				} catch (LineOverlapException e) {
+					//do nothing, intsct is null
 				}
 				if (intsct == null && (l.containsPoint(p1) || l.containsPoint(p2) || containsPoint(l.p1) || containsPoint(l.p2))) {
 					System.out.println(l.containsPoint(p1) || l.containsPoint(p2) || containsPoint(l.p1) || containsPoint(l.p2));
@@ -82,7 +84,12 @@ public class LineSegR2 extends LineR2 {
 
 	public boolean intersects(Rectangle r) {
 		LineSegR2[] segments = rectToLineSegs(r);
-		return (r.contains(x1, y1) || r.contains(x2, y2) || intersects(segments[0]) || intersects(segments[1])|| intersects(segments[2]) || intersects(segments[3]));
+		return (intersects(segments[0]) || intersects(segments[1])|| intersects(segments[2]) || intersects(segments[3]));
+	}
+	
+	public boolean intersects(RectangleR2 r) {
+		LineSegR2[] segments = rectToLineSegs(r);
+		return (intersects(segments[0]) || intersects(segments[1])|| intersects(segments[2]) || intersects(segments[3]));
 	}
 
 	/**
@@ -94,6 +101,31 @@ public class LineSegR2 extends LineR2 {
 	 *         starting with the top and index 0 and going clockwise
 	 */
 	public static LineSegR2[] rectToLineSegs(Rectangle r) {
+		LineSegR2 l1;
+		LineSegR2 l2;
+		LineSegR2 l3;
+		LineSegR2 l4;
+		try {
+			// top line
+			l1 = new LineSegR2(r.getMinX(), r.getMinY(), r.getMaxX(), r.getMinY());
+			// right line
+			l2 = new LineSegR2(r.getMaxX(), r.getMaxY(), r.getMaxX(), r.getMinY());
+			// bottom line
+			l3 = new LineSegR2(r.getMinX(), r.getMaxY(), r.getMaxX(), r.getMaxY());
+			// left line
+			l4 = new LineSegR2(r.getMinX(), r.getMinY(), r.getMinX(), r.getMaxY());
+		} catch (Exception e) {
+			System.err.println("rectToLineSegs(Rectangle r) could not produce segments from rectangle. (returning null for all indicies)");
+			l1 = null;
+			l2 = null;
+			l3 = null;
+			l4 = null;
+		}
+		LineSegR2[] segments = { l1, l2, l3, l4 };
+		return segments;
+	}
+	
+	public static LineSegR2[] rectToLineSegs(RectangleR2 r) {
 		LineSegR2 l1;
 		LineSegR2 l2;
 		LineSegR2 l3;

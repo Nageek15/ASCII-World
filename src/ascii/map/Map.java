@@ -113,6 +113,20 @@ public class Map {
     	}
     	Console.s.println("Crystals Used: "+Crystal.crystalsUsed()+"/"+currentLevel.crystalsToWin());
     }
+    
+    public void drawMapFP(Console c) {
+    	Sprite[] levelSprites = new Sprite[currentLevel.getSprites().size()];
+    	Sprite[] spritesToDraw=App.p.getVision().getVisable(currentLevel.getSprites().toArray(levelSprites), App.p.getPos());
+    	for (int i=0; i<spritesToDraw.length;i++) {
+    		if (spritesToDraw[i]==null) {
+    			//draw air
+    			c.println("░");
+    		} else {
+    			c.println(spritesToDraw[i].getChar());
+    		}
+    	}
+    	Console.s.println("Crystals Used: "+Crystal.crystalsUsed()+"/"+currentLevel.crystalsToWin());
+    }
 
     /**Set the level by number
      *

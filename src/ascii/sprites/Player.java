@@ -3,6 +3,7 @@ package ascii.sprites;
 import java.awt.Point;
 
 import ascii.App;
+import ascii.map.RayCastor;
 import gameutil.text.Console;
 
 public class Player extends Sprite{
@@ -12,6 +13,7 @@ public class Player extends Sprite{
 	private int maxJump=3;
 	private int jumpHorizontalVelocity=0;
 	private boolean jumping=false;
+	private RayCastor r;
 	
 	/**For new game
 	 * 
@@ -22,6 +24,7 @@ public class Player extends Sprite{
 		i=new Inventory(this);
 		i.add(new Scroll("Scroll of Grabbing","This is a command scroll. They will tell you a list of things that you can type and what it will do.\n*note that \" \" are used for arguments (<argument>) that have spaces in them\n\nCommands:\ngrab - grab something"));
 		i.add(new Scroll("Scroll of Walking", "walk <left/right> - walk left or walk right\n  ex: walk right"));
+		r=new RayCastor(31);
 	}
 	
 	/**For loading from file
@@ -139,6 +142,14 @@ public class Player extends Sprite{
 	
 	public boolean isJumping() {
 		return jumping;
+	}
+	
+	public RayCastor getVision() {
+		return r;
+	}
+	
+	public void turn() {
+		r.turn();
 	}
 	
 	
