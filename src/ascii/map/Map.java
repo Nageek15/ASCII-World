@@ -117,12 +117,22 @@ public class Map {
     public void drawMapFP(Console c) {
     	Sprite[] levelSprites = new Sprite[currentLevel.getSprites().size()];
     	Sprite[] spritesToDraw=App.p.getVision().getVisable(currentLevel.getSprites().toArray(levelSprites), App.p.getPos());
-    	for (int i=0; i<spritesToDraw.length;i++) {
+    	boolean center=false;
+    	for (int i=spritesToDraw.length-1; i>0;i--) {
+    		if (i==(App.p.getVision().getResolution()-1)/2+1) {
+    			center=true;
+    		}
     		if (spritesToDraw[i]==null) {
     			//draw air
-    			c.println("░");
+    			c.print("░");
     		} else {
-    			c.println(spritesToDraw[i].getChar());
+    			c.print(spritesToDraw[i].getChar());
+    		}
+    		if (center) {
+    			c.println("<<");
+    			center=false;
+    		} else {
+    			c.println("");
     		}
     	}
     	Console.s.println("Crystals Used: "+Crystal.crystalsUsed()+"/"+currentLevel.crystalsToWin());

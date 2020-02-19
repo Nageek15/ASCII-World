@@ -43,7 +43,7 @@ public class RayCastor {
 	
 	private static VectorR2 findInvertX() {
 		try {
-			return new VectorR2(-1,0);
+			return new VectorR2(-1,1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,7 +79,7 @@ public class RayCastor {
 				/*v.$A$(new VectorR2(pos.x+v.getMagnetudeX(),pos.y+v.getMagnetudeY()));
 				v.base().move(pos.x, pos.y);
 				*/
-				v=new VectorR2(new PointR2(pos.x,pos.y-(double)resolution/2),new PointR2(pos.x+v.getMagnetudeX(),pos.y-(double)resolution/2+v.getMagnetudeY()));
+				v=new VectorR2(new PointR2(pos.x,pos.y/*-(double)resolution/2*/),new PointR2(pos.x+v.getMagnetudeX(),pos.y/*-(double)resolution/2*/+v.getMagnetudeY()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				//should never happen
@@ -114,6 +114,12 @@ public class RayCastor {
 				spritesVisable[visableIndex]=null;//air
 			}
 			visableIndex++;
+			try {
+				v=new VectorR2(v.getMagnetudeX()*direction,v.getMagnetudeY()*direction);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return spritesVisable;
 	}
