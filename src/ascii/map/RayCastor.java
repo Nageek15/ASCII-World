@@ -9,6 +9,7 @@ import ascii.sprites.Sprite;
 import gameutil.geom.g2D.PointR2;
 import gameutil.geom.g2D.RectangleR2;
 import gameutil.geom.g2D.VectorR2;
+import gameutil.text.Console;
 
 public class RayCastor {
 	int resolution;
@@ -31,7 +32,7 @@ public class RayCastor {
 		
 		for (int i=0;i<resolution;i++) {
 			try {
-				rays[i]=new VectorR2(distance,i);
+				rays[i]=new VectorR2(distance,i-(double) resolution/2);
 				rays[i]. $X$ (10);//make view distance longer
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -57,11 +58,22 @@ public class RayCastor {
 		return resolution;
 	}
 	
+	public int getDirection() {
+		return direction;
+	}
+	
 	public void turn() {
 		for (VectorR2 v:rays) {
 			direction*=-1;
-			v. $X$ (invertX);//invert X of vectors (multiplying by scalar -1 would result in one direction being perceived upside down
+			//v. $X$ (invertX);//invert X of vectors (multiplying by scalar -1 would result in one direction being perceived upside down
+			/*try {
+				v=new VectorR2(Math.abs(v.getMagnetudeX())*direction,v.getMagnetudeY());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
 		}
+		
 	}
 	
 	/**Returns the array of sprites that are visible from the array of sprites in the level
@@ -75,11 +87,7 @@ public class RayCastor {
 		for (int i=0;i<rays.length;i++) {
 			VectorR2 v=rays[i];
 			try {
-				//set position of vector
-				/*v.$A$(new VectorR2(pos.x+v.getMagnetudeX(),pos.y+v.getMagnetudeY()));
-				v.base().move(pos.x, pos.y);
-				*/
-				v=new VectorR2(new PointR2(pos.x,pos.y/*-(double)resolution/2*/),new PointR2(pos.x+v.getMagnetudeX(),pos.y/*-(double)resolution/2*/+v.getMagnetudeY()));
+				v=new VectorR2(new PointR2(pos.x,pos.y),new PointR2(pos.x+direction*Math.abs(v.getMagnetudeX()),pos.y+v.getMagnetudeY()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				//should never happen
@@ -114,12 +122,12 @@ public class RayCastor {
 				spritesVisable[visableIndex]=null;//air
 			}
 			visableIndex++;
-			try {
-				v=new VectorR2(v.getMagnetudeX()*direction,v.getMagnetudeY()*direction);
+			/*try {
+				v=new VectorR2(v.getMagnetudeX(),v.getMagnetudeY());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 		}
 		return spritesVisable;
 	}

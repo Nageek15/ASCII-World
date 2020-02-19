@@ -97,6 +97,15 @@ public class Map {
     	spritesToDraw.put(new Point(cameraX,cameraY),App.p);
     	
     	for (int row=0;row<camera.getArea().height;row++) {
+    		char facing;
+    		if (App.p.getDirection()==1) {
+    			facing='>';
+    		} else {
+    			facing='<';
+    		}
+    		Console.s.print(facing);
+    		Console.s.print(facing);
+    		Console.s.print(facing);
     		for (int column=0;column<camera.getArea().width;column++) {
     			if (spritesToDraw.containsKey(new Point(column,row))) {
     				Sprite s=spritesToDraw.get(new Point(column,row));
@@ -108,6 +117,9 @@ public class Map {
     				Console.s.print("░");
     			}
     		}
+    		Console.s.print(facing);
+    		Console.s.print(facing);
+    		Console.s.print(facing);
     		Console.s.println("");
     		
     	}

@@ -241,13 +241,24 @@ public class App {
 							state=GAME_STATE.exit;
 						break;
 						case "walk":
-							switch (cmd.get(1)) {
-								case "right":
-									p.walk(1);
+							if (!fp) {
+								switch (cmd.get(1)) {
+									case "right":
+										p.walk(1);
+									break;
+									case "left":
+										p.walk(-1);
+									break;
+								}
+							} else {
+								switch (cmd.get(1)) {
+								case "ahead":
+									p.walk(1*p.getDirection());
 								break;
-								case "left":
-									p.walk(-1);
+								case "back":
+									p.walk(-1*p.getDirection());
 								break;
+							}
 							}
 						break;
 						case "brincar":
@@ -257,16 +268,30 @@ public class App {
 							} catch (NumberFormatException e) {
 								
 							}
-							switch (cmd.get(1)) {
+							if (!fp) {
+								switch (cmd.get(1)) {
+									default:
+										p.jump(0,jumpAmount);
+									break;
+									case "right":
+										p.jump(1,jumpAmount);
+									break;
+									case "left":
+										p.jump(-1,jumpAmount);
+									break;
+								}
+							} else {
+								switch (cmd.get(1)) {
 								default:
 									p.jump(0,jumpAmount);
 								break;
-								case "right":
-									p.jump(1,jumpAmount);
+								case "ahead":
+									p.jump(1*p.getDirection(),jumpAmount);
 								break;
-								case "left":
-									p.jump(-1,jumpAmount);
+								case "back":
+									p.jump(-1*p.getDirection(),jumpAmount);
 								break;
+							}
 							}
 						break;
 						case "grab":
@@ -441,7 +466,11 @@ public class App {
 					
 					//draw
 					Console.s.clr();
-					map.drawMap(Console.s);
+					if (fp) {
+						map.drawMapFP(Console.s);
+					} else {
+						map.drawMap(Console.s);
+					}
 					//write
 					Console.s.println("Current level: "+map.getLvNo());
 					Console.s.println("Type ? for basic help.");
@@ -573,6 +602,12 @@ public class App {
 							Console.s.println("menu - return to menu");
 							Console.s.println("exit - exit game");
 							Console.s.pause();
+						break;
+						case "fp":
+							fp=!fp;
+						break;
+						case "turn":
+							p.turn();
 						break;
 					}
 				break;

@@ -110,6 +110,10 @@ public class Player extends Sprite{
 			Item item=App.map.itemAt(pos);
 			i.add(item);
 			Console.s.println("You found a(n) "+item.getName()+"!");
+		} else if (App.map.isItemAt(new Point(pos.x+getDirection(),pos.y))) {
+			Item item=App.map.itemAt(new Point(pos.x+getDirection(),pos.y));
+			i.add(item);
+			Console.s.println("You found a(n) "+item.getName()+"!");
 		} else {
 			Console.s.println("There was nothing there.");
 		}
@@ -152,6 +156,8 @@ public class Player extends Sprite{
 		r.turn();
 	}
 	
-	
+	public int getDirection() {
+		return r.getDirection();
+	}
 	
 }
