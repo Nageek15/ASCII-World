@@ -33,6 +33,7 @@ public class App {
 	public static Sounds sound=new Sounds();
 	private boolean music=true;
 	private boolean fp=false;
+	private int difficulty=0;
 	
 	//Always gotta have that unicorns array of Strings which are arguments applied to the command to run the jar.
 	public static void main(String[] unicorns) {
@@ -132,6 +133,8 @@ public class App {
 							map=new Map("saves/"+saveDir+"/levels",lvNo);
 							int noCrystalsUsed=Integer.parseInt(reader.readLine());
 							Crystal.set(noCrystalsUsed);
+							difficulty=Integer.parseInt(reader.readLine());
+							fp=Boolean.parseBoolean(reader.readLine());
 							//load inventory
 				        	int line=11;
 				        	//read inventory contents
@@ -178,6 +181,16 @@ public class App {
 					String name=Console.s.readLine();
 					//create player
 					p=new Player(name);
+					{
+						int difficulty=-1;
+						while (difficulty<0||difficulty>3) {
+							Console.s.clr();
+							Console.s.println("What difficulty would you like to play(0-3)?");
+							difficulty=Console.s.readLineInt();
+						}
+						this.difficulty=difficulty;
+					}
+					Console.s.clr();
 					//intro text
 					Console.s.println("You are about to appear in ASCII World.");
 					//get game ready
@@ -652,6 +665,10 @@ public class App {
 			writer.write(String.valueOf(map.getLvNo()));//ln 9 - lv that the player is in
 			writer.newLine();
 			writer.write(String.valueOf(Crystal.crystalsUsed()));//ln 10 - no of crystals used
+			writer.newLine();
+			writer.write(String.valueOf(difficulty)); //ln 11 - difficulty
+			writer.newLine();
+			writer.write(String.valueOf(fp)); //ln 12 - is first person
 			writer.newLine();
 			//player inventory
 			for (Item i:p.getInventory().getItems()) {
