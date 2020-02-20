@@ -1061,8 +1061,11 @@ public class Console {
 		 * filler for infinite while loop
 		 */
 		private void doNothing() {
-			if (!reading) {
-				System.out.print("");
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		public void interrupt() {

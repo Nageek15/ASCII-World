@@ -41,10 +41,10 @@ public class App {
 	}
 	
 	public App() {
-		sound.setSourcePath("music/");
+		sound.setSourcePath("sounds/");
 		Console.s.setTheme(Console.theme.pink);
 		Console.s.print("");
-		sound.playSoundOnLoop("Track.wav", 1);
+		sound.playSoundOnLoop("music/Track.wav", 1);
 		toggleMusic();
 		while (state!=GAME_STATE.exit) {
 			switch (state) {
@@ -696,9 +696,9 @@ public class App {
 	public void toggleMusic() {
 		music=!music;
 		if (!music) {
-			sound.pauseSound("Track.wav");
+			sound.pauseSound("music/Track.wav");
 		} else {
-			sound.resumeSound("Track.wav");
+			sound.resumeSound("music/Track.wav");
 		}
 	}
 

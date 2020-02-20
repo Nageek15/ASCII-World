@@ -13,6 +13,7 @@ public class Sprite {
 	protected boolean solid;
 	protected boolean space=false;
 	protected boolean inWorld=true;
+	protected boolean visible=true;
 	
 	public Sprite(String name,char c,Point pos) {
 		this.name=name;
@@ -186,5 +187,12 @@ public class Sprite {
 	   }
 		hp-=no;
 	}
-	
+   
+   public void setVisible(boolean visible) {
+	   this.visible=visible;
+   }
+   
+   public boolean isVisible() {
+	   return visible;
+   }
 }

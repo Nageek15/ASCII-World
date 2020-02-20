@@ -98,7 +98,7 @@ public class RayCastor {
 			//find sprites intersecting ray and the closest to the origin
 			for (Sprite s:sprites) {
 				RectangleR2 spriteRect=new RectangleR2(new PointR2(s.getPos()),1,1);
-				if (v.intersects(spriteRect)) {
+				if (s.isVisible()&&v.intersects(spriteRect)) {
 					//spritesintersecting.add(s);
 					
 					double spriteDistance=v.base().distance(v.intersection(spriteRect));//new PointR2(s.getPos()));

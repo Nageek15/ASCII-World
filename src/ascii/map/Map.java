@@ -89,9 +89,11 @@ public class Map {
     	int cameraX=camera.getArea().width/2;
     	int cameraY=camera.getArea().height/2;
     	for (Sprite s:screenSprites) {
-    		int x=s.getPos().x-camera.location.x+cameraX;
-    		int y=s.getPos().y*-1-camera.location.y*-1+cameraY;//invert y so that y+ is up
-    		spritesToDraw.put(new Point(x,y),s);
+    		if (s.isVisible()) {
+	    		int x=s.getPos().x-camera.location.x+cameraX;
+	    		int y=s.getPos().y*-1-camera.location.y*-1+cameraY;//invert y so that y+ is up
+	    		spritesToDraw.put(new Point(x,y),s);
+    		}
     	}
     	
     	spritesToDraw.put(new Point(cameraX,cameraY),App.p);

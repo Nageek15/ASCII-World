@@ -46,6 +46,7 @@ public class Player extends Sprite{
 		this.jumpHorizontalVelocity=jumpHorizontalVelocity;
 		this.jumping=jumping;
 		i=new Inventory(this);
+		r=new RayCastor(31);
 	}
 	
 	
