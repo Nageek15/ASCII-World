@@ -256,4 +256,25 @@ public class VectorR2 extends LineSegR2 {
 			return null;
 		}
 	}
+	
+	public void move(PointR2 pos) {
+		try {
+			VectorR2 newVector=new VectorR2(pos,new PointR2(pos.getX()+getMagnetudeX(),pos.getY()+getMagnetudeY()));
+			this. $X$ (0). $A$ (newVector);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void rotate(double degrees) {
+		PointR2 pos=base();
+		move(new PointR2(0,0));
+		try {
+			VectorR2 newVector=new VectorR2(mX*Math.cos(degrees)-mY*Math.sin(degrees),mY*Math.cos(degrees)+mX*Math.sin(degrees));//rotate about origin
+			this. $X$ (0). $A$ (newVector).move(pos);//set to new vector and move back to original position
+		} catch (Exception e) {
+			//will never happen
+		}
+	}
 }

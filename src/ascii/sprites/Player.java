@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import ascii.App;
 import ascii.map.RayCastor;
+import gameutil.geom.g2D.VectorR2;
 import gameutil.text.Console;
 
 public class Player extends Sprite{
@@ -14,6 +15,7 @@ public class Player extends Sprite{
 	private int jumpHorizontalVelocity=0;
 	private boolean jumping=false;
 	private RayCastor r;
+	private double lowestAudibleVolume=.1;
 	
 	/**For new game
 	 * 
@@ -159,6 +161,24 @@ public class Player extends Sprite{
 	
 	public int getDirection() {
 		return r.getDirection();
+	}
+	
+	public void hear(Sound s) {
+		if (s.getAmplitude()>=lowestAudibleVolume) {
+			s.play();
+		}
+	}
+	
+	public void yell() {
+		Sound s=null;
+		try {
+			s = new Sound(pos,"lelelele",12,new VectorR2(r.getDirection(),0));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		App.map.getCurrentLevel().add(s);
+		s.play();
 	}
 	
 }

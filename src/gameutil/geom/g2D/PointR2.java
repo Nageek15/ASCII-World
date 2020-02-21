@@ -54,4 +54,8 @@ public class PointR2 {
 	public double getY() {
 		return y;
 	}
+	
+	public Point toPoint() {
+		return new Point((int)Math.round(x),(int)Math.round(y));
+	}
 }

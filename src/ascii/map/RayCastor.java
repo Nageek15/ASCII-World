@@ -88,18 +88,18 @@ public class RayCastor {
 			VectorR2 v=rays[i];
 			try {
 				v=new VectorR2(new PointR2(pos.x,pos.y),new PointR2(pos.x+direction*Math.abs(v.getMagnetudeX()),pos.y+v.getMagnetudeY()));
+				/*v.move(new PointR2(pos));
+				v.rotate(180*direction);*///may use these to allow for other view angles; however, for now they do not work.
 			} catch (Exception e) {
 				e.printStackTrace();
 				//should never happen
 			}
-			//ArrayList<Sprite> spritesintersecting=new ArrayList<>();
 			ArrayList<Sprite> spritesClosest=new ArrayList<>();
 			double closest=2147483647;
 			//find sprites intersecting ray and the closest to the origin
 			for (Sprite s:sprites) {
 				RectangleR2 spriteRect=new RectangleR2(new PointR2(s.getPos()),1,1);
 				if (s.isVisible()&&v.intersects(spriteRect)) {
-					//spritesintersecting.add(s);
 					
 					double spriteDistance=v.base().distance(v.intersection(spriteRect));//new PointR2(s.getPos()));
 					if (spriteDistance<closest) {
