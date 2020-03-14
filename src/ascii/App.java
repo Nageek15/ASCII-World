@@ -240,7 +240,7 @@ public class App {
 					switch (cmd.cmd()) {
 						case "?":
 							Console.s.println("To begin, use your Scroll of Grabbing.");
-							Console.s.println("The commands are case sensitive");
+							Console.s.println("The commands and item names are case sensitive");
 							Console.s.println("");
 							Console.s.println("Commands:");
 							Console.s.println("use <item> - use an item (use quotes for item's that have names with spaces)");
