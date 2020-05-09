@@ -144,6 +144,11 @@ public class Sprite {
 		
 	}
 	
+	//override this
+	public void interact() {
+		
+	}
+	
 	public boolean attemptMove(Point pos) {
 		if (App.map.solidAt(pos)) {
 			return false;

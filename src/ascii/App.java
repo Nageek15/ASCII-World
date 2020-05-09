@@ -10,30 +10,40 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 
 import ascii.map.Map;
 import ascii.sprites.Block;
 import ascii.sprites.Bullet;
 import ascii.sprites.Crystal;
 import ascii.sprites.Enemy;
+import ascii.sprites.FirstPersonBlock;
 import ascii.sprites.Item;
+import ascii.sprites.MysteriousOrb;
 import ascii.sprites.Player;
 import ascii.sprites.Scroll;
+import ascii.sprites.ScrollOfStats;
+import ascii.sprites.Shop;
+import ascii.sprites.Sound;
 import ascii.sprites.Spike;
 import ascii.sprites.Sprite;
+import ascii.sprites.Teleporter;
+import ascii.sprites.ThirdPersonBlock;
 import gameutil.geom.g2D.VectorR2;
 import gameutil.text.Argument;
 import gameutil.text.Console;
 
 public class App {
+	public static final Random rand=new Random();
 	public static Map map;
-	private enum GAME_STATE {menu,intro,load,inGame,edit,exit};
-	private GAME_STATE state=GAME_STATE.menu;
+	public enum GAME_STATE {menu,intro,load,inGame,edit,exit};
+	private static GAME_STATE state=GAME_STATE.menu;
 	public static Player p;
 	public static Sounds sound=new Sounds();
 	private boolean music=true;
-	private boolean fp=false;
-	private int difficulty=0;
+	private static boolean fp=false;
+	private static int difficulty=0;
+	public static final int maxDifficulty=5;
 	
 	//Always gotta have that unicorns array of Strings which are arguments applied to the command to run the jar.
 	public static void main(String[] unicorns) {
@@ -72,7 +82,7 @@ public class App {
 						state=GAME_STATE.exit;
 					} else if (choice.equals("edit the yams")) {
 						map=new Map("levels",0);
-						p=new Player("Keegan");
+						p=new Player("Keegan",10);
 						Console.s.setUserNextLineEnabled(true);
 						state=GAME_STATE.edit;
 						map.setEditMode(true);
@@ -126,7 +136,7 @@ public class App {
 				        
 				        try {
 				        	//read player properties (name, pos x and y, hp, mhp, jump, max jump, jump horizontal velocity, jumping)
-				        	p=new Player(reader.readLine(),new Point(Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine())),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),reader.readLine().equals("true"));
+				        	p=new Player(reader.readLine(),new Point(Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine())),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),reader.readLine().equals("true"),Double.parseDouble(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()),Integer.parseInt(reader.readLine()));
 				        	
 				        	//load levels
 				        	int lvNo=Integer.parseInt(reader.readLine());							
@@ -180,16 +190,21 @@ public class App {
 					Console.s.print("What is your name? ");
 					String name=Console.s.readLine();
 					//create player
-					p=new Player(name);
+					
 					{
 						int difficulty=-1;
-						while (difficulty<0||difficulty>3) {
+						while (difficulty<0||difficulty>maxDifficulty) {
 							Console.s.clr();
-							Console.s.println("What difficulty would you like to play(0-3)?");
+							Console.s.println("What difficulty would you like to play(0-"+String.valueOf(maxDifficulty)+")?");
 							difficulty=Console.s.readLineInt();
 						}
 						this.difficulty=difficulty;
 					}
+					int hpMod=difficulty;
+					if (hpMod>3) {
+						hpMod=3;
+					}
+					p=new Player(name,10-2*hpMod);
 					Console.s.clr();
 					//intro text
 					Console.s.println("You are about to appear in ASCII World.");
@@ -208,7 +223,7 @@ public class App {
 						state=GAME_STATE.menu;
 						Crystal.set(0);//reset crystals used
 						break;
-					} else if (Crystal.crystalsUsed()>=map.currentLevel.crystalsToWin()) {
+					} else if (Crystal.crystalsUsed()>=map.currentLevel.crystalsToWin()&&map.getLvNo()==p.getHighestLevel()) {
 						if (map.isLastLevel()) {//if it's the last level then you win!
 							Console.s.clr();
 							Console.s.println("YOU WIN!");
@@ -218,7 +233,8 @@ public class App {
 						} else {
 							p.setPos(new Point(0,5));//reset player position
 							Crystal.set(0);//reset crystals used
-							map.setLevel(map.getLvNo()+1);//go to next level if it isn't the last level
+							map.setLevel(p.getHighestLevel()+1);//go to next level if it isn't the last level
+							p.setHighestLevel(map.getLvNo());
 						}
 					}
 					map.getCamera().location=p.getPos();
@@ -233,6 +249,7 @@ public class App {
 					}
 					//write
 					Console.s.println("HP: "+p.getHealth()+"/"+p.getMaxHealth());
+					Console.s.println(p.getLetters()+"L");
 					Console.s.println("Type ? for basic help.");
 					//input
 					Argument cmd=Argument.getArgs(Console.s.readLine());
@@ -382,6 +399,11 @@ public class App {
 							Console.s.println("That's a good word.");
 							Console.s.pause();
 						break;
+						case "interact":
+							for (Sprite s:map.spritesAt(p.getPos())) {
+								s.interact();
+							}
+						break;
 						case "shoot":
 							boolean add=false;
 							VectorR2 velocity=null;
@@ -430,7 +452,7 @@ public class App {
 								
 							}
 							if (add) {
-								Map.getCurrentLevel().add(new Bullet(new Point(p.getPos()),velocity,1));
+								Map.getCurrentLevel().add(new Bullet(new Point(p.getPos()),velocity,p.getAtk()));
 							}
 						break;
 						case "spell":
@@ -451,19 +473,206 @@ public class App {
 										break;
 									}
 								break;
+								case "help please":
+									Console.s.println("please fly - fly");
+									Console.s.println("help please - spell help");
+									Console.s.println("test yams <level number> - test a level");
+									Console.s.println("first person - enter first person mode");
+								break;
 								case "test yams":
 									try {
+										p.setPos(new Point(0,5));//reset player position
+										Crystal.set(0);//reset crystals used
 										map.setLevel(Integer.parseInt(cmd.get(2)));
 									} catch (Exception e) {
 										
 									}
 								break;
+								case "first person":
+									fp=true;
+								break;
+							}
+						break;
+						case "yell":
+							add=false;
+							velocity=null;
+							pos=null;
+							if (!fp) {
+								switch (cmd.get(1)) {
+									case "left":
+										try {
+											velocity=new VectorR2(-1,0);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x-1,p.getPos().y);
+										add=true;
+									break;
+									case "right":
+										try {
+											velocity=new VectorR2(1,0);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x+1,p.getPos().y);
+										add=true;
+									break;
+									case "up":
+										try {
+											velocity=new VectorR2(0,1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x,p.getPos().y+1);
+										add=true;
+									break;
+									case "down":
+										try {
+											velocity=new VectorR2(0,-1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x,p.getPos().y-1);
+										add=true;
+									break;
+									case "leftdown":
+										try {
+											velocity=new VectorR2(-1,-1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x-1,p.getPos().y);
+										add=true;
+									break;
+									case "rightdown":
+										try {
+											velocity=new VectorR2(1,-1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x+1,p.getPos().y);
+										add=true;
+									break;
+									case "leftup":
+										try {
+											velocity=new VectorR2(-1,1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x-1,p.getPos().y);
+										add=true;
+									break;
+									case "rightup":
+										try {
+											velocity=new VectorR2(1,1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x+1,p.getPos().y);
+										add=true;
+									break;
+									
+								}
+							} else {
+								switch (cmd.get(1)) {
+									case "ahead":
+										try {
+											velocity=new VectorR2(p.getDirection(),0);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x+p.getDirection(),p.getPos().y);
+										add=true;
+									break;
+									case "back":
+										try {
+											velocity=new VectorR2(-p.getDirection(),0);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x-p.getDirection(),p.getPos().y);
+										add=true;
+									break;
+									case "up":
+										try {
+											velocity=new VectorR2(0,1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x,p.getPos().y+1);
+										add=true;
+									break;
+									case "down":
+										try {
+											velocity=new VectorR2(0,-1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x,p.getPos().y-1);
+										add=true;
+									break;
+									case "aheaddown":
+										try {
+											velocity=new VectorR2(p.getDirection(),-1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x+p.getDirection(),p.getPos().y);
+										add=true;
+									break;
+									case "backdown":
+										try {
+											velocity=new VectorR2(-p.getDirection(),-1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x-p.getDirection(),p.getPos().y);
+										add=true;
+									break;
+									case "aheadup":
+										try {
+											velocity=new VectorR2(p.getDirection(),1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x+p.getDirection(),p.getPos().y);
+										add=true;
+									break;
+									case "backup":
+										try {
+											velocity=new VectorR2(-p.getDirection(),1);
+										} catch (Exception e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										pos=new Point(p.getPos().x-p.getDirection(),p.getPos().y);
+										add=true;
+									break;
+								}
+							}
+							if (add) {
+								Map.getCurrentLevel().add(new Sound(p.getPos()/*new Point(pos)*/,"Yams!",100,velocity));
 							}
 						break;
 						case "music":
 							toggleMusic();
 						break;
-						case "fp":
+						case "FP":
 							fp=!fp;
 						break;
 						case "turn":
@@ -476,7 +685,9 @@ public class App {
 				case edit:
 					map.getCamera().location=p.getPos();
 					map.update();
-					
+					if (difficulty>3) {
+						fp=true;
+					}
 					//draw
 					Console.s.clr();
 					if (fp) {
@@ -485,7 +696,7 @@ public class App {
 						map.drawMap(Console.s);
 					}
 					//write
-					Console.s.println("Current level: "+map.getLvNo());
+					Console.s.println("Current level: "+(map.getLvNo()+1));
 					Console.s.println("Type ? for basic help.");
 					//input
 					cmd=Argument.getArgs(Console.s.readLine());
@@ -540,7 +751,7 @@ public class App {
 						case "open":
 							no=0;
 							try {
-								no=Integer.parseInt(cmd.get(1));
+								no=Integer.parseInt(cmd.get(1))-1;//system level numbers start at 0
 							} catch (Exception e) {
 								
 							}
@@ -589,6 +800,31 @@ public class App {
 								break;
 								case "enemy":
 									Map.currentLevel.add(new Enemy(p.getPos()));
+								break;
+								case "fpblock":
+									Map.currentLevel.add(new FirstPersonBlock(p.getPos()));
+								break;
+								case "tpblock":
+									Map.currentLevel.add(new ThirdPersonBlock(p.getPos()));
+								break;
+								case "fp":
+									Map.currentLevel.add(new FirstPersonBlock(p.getPos()));
+								break;
+								case "tp":
+									Map.currentLevel.add(new ThirdPersonBlock(p.getPos()));
+								break;
+								case "orb":
+									Map.currentLevel.add(new MysteriousOrb(p.getPos()));
+								break;
+								case "sos":
+									Map.currentLevel.add(new ScrollOfStats(p.getPos()));
+								break;
+								case "shop":
+									Map.currentLevel.add(new Shop(p.getPos(),true));
+								break;
+								case "teleporter":
+									Map.currentLevel.add(new Teleporter(p.getPos()));
+								break;
 							}
 						break;
 						
@@ -605,8 +841,9 @@ public class App {
 							Console.s.println("s - move down");
 							Console.s.println("open <lvno> - open level <lvno>");
 							Console.s.println("new - make a new level");
-							Console.s.println("p <sprite> - place a sprite (e.g. 'crystal', 'spike', or 'block'");
+							Console.s.println("p <sprite> - place a sprite (e.g. 'crystal', 'spike', or 'block')");
 							Console.s.println("p scroll <name> <contentents> - place a scroll with specified name and contents");
+							Console.s.println("ls - list sprite names");
 							Console.s.println("save - saves all levels in their current state");
 							Console.s.println("del - delete all sprites under you");
 							Console.s.println("goal <no> - set crystals needed for current level");
@@ -615,6 +852,19 @@ public class App {
 							Console.s.println("menu - return to menu");
 							Console.s.println("exit - exit game");
 							Console.s.pause();
+						break;
+						case "ls":
+							Console.s.println("Sprite names:");
+							Console.s.println("- crystal");
+							Console.s.println("- spike");
+							Console.s.println("- block");
+							Console.s.println("- enemy");
+							Console.s.println("- scroll");
+							Console.s.println("- fpblock (first person block) fp also accepted");
+							Console.s.println("- tpblock (third person block) tp also accepted");
+							Console.s.println("- orb");
+							Console.s.println("- sos (Scroll of Stats)");
+							Console.s.println("- shop");
 						break;
 						case "fp":
 							fp=!fp;
@@ -662,13 +912,23 @@ public class App {
 			writer.newLine();
 			writer.write(String.valueOf(p.isJumping()));//ln 8
 			writer.newLine();
-			writer.write(String.valueOf(map.getLvNo()));//ln 9 - lv that the player is in
+			writer.write(String.valueOf(p.getLowestAudibleVolume()));//ln 9 - lowest audible volume
 			writer.newLine();
-			writer.write(String.valueOf(Crystal.crystalsUsed()));//ln 10 - no of crystals used
+			writer.write(String.valueOf(p.getAtk()));//ln 10 - atk
 			writer.newLine();
-			writer.write(String.valueOf(difficulty)); //ln 11 - difficulty
+			writer.write(String.valueOf(p.getLetters()));//ln 11 - letters
 			writer.newLine();
-			writer.write(String.valueOf(fp)); //ln 12 - is first person
+			writer.write(String.valueOf(p.getHighestLevel()));//ln 12 - player's highest visited level
+			writer.newLine();
+			//part II
+			
+			writer.write(String.valueOf(map.getLvNo()));//ln 1 (13) - lv that the player is in
+			writer.newLine();
+			writer.write(String.valueOf(Crystal.crystalsUsed()));//ln 2 (14) - no of crystals used
+			writer.newLine();
+			writer.write(String.valueOf(difficulty)); //ln 3 (15) - difficulty
+			writer.newLine();
+			writer.write(String.valueOf(fp)); //ln 4 (16) - is first person
 			writer.newLine();
 			//player inventory
 			for (Item i:p.getInventory().getItems()) {
@@ -701,5 +961,20 @@ public class App {
 			sound.resumeSound("music/Track.wav");
 		}
 	}
-
+	
+	public static void setFP(boolean b) {
+		fp=b;
+	}
+	
+	public static boolean isFP() {
+		return fp;
+	}
+	
+	public static int getDifficulty() {
+		return difficulty;
+	}
+	
+	public static GAME_STATE getState() {
+		return state;
+	}
 }

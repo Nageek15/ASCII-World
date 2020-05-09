@@ -18,6 +18,46 @@ public class Inventory {
 		i.inWorld=false;
 	}
 	
+	public boolean add(ArrayList<Item> items) {
+		return this.items.addAll(items);
+	}
+	
+	public boolean remove(Item i) {
+		if (items.contains(i)) {
+			items.remove(i);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean remove(ArrayList<Item> items) {
+		return this.items.removeAll(items);
+	}
+	
+	public boolean remove(String name) {
+		for (Item i:items) {
+			if (i.name.equals(name)) {
+				return remove(i);
+			}
+		}
+		return false;
+	}
+	
+	public int remove(String name,int amount) {
+		int amountRemoved=0;
+		for (Item i:items) {
+			if (amountRemoved>=amount) {
+				break;
+			}
+			if (i.name.equals(name)) {
+				remove(i);
+				amountRemoved++;
+			}
+		}
+		
+		return amountRemoved;
+	}
+	
 	public boolean drop(Item i) {
 		if (items.contains(i)) {
 			items.remove(i);
@@ -25,7 +65,7 @@ public class Inventory {
 			return true;
 		}
 		return false;
-	}
+	}	
 	
 	public boolean drop(String name) {
 		for (Item i:items) {
@@ -96,5 +136,30 @@ public class Inventory {
 	
 	public ArrayList<Item> getItems(){
 		return items;
+	}
+	
+	public ArrayList<Item> getItems(String name){
+		ArrayList<Item> resultItems=new ArrayList<Item>();
+		for (Item i:items) {
+			if (i.name.equals(name)) {
+				resultItems.add(i);
+			}
+		}
+		return resultItems;
+	}
+	
+	public ArrayList<Item> getItems(String name,int no){
+		int amountGotten=0;
+		ArrayList<Item> resultItems=new ArrayList<Item>();
+		for (Item i:items) {
+			if (amountGotten>no) {
+				break;
+			}
+			if (i.name.equals(name)) {
+				resultItems.add(i);
+				amountGotten++;
+			}
+		}
+		return resultItems;
 	}
 }

@@ -13,12 +13,14 @@ public class Scroll extends Item{
 		super(name,'ƒ',pos,"It says some stuff...",true,true,false);
 		space=true;
 		this.contents=contents;
+		worth=4;
 	}
 	
 	public Scroll(String name, String contents) {
 		super(name,'ƒ',new Point(0,0),"It says some stuff...",true,false,false);
 		space=true;
 		this.contents=contents;
+		worth=4;
 	}
 	
 	@Override
@@ -31,6 +33,10 @@ public class Scroll extends Item{
 	
 	@Override
 	public String getProps() {
-		return "String |/l\\| "+name+" |/eS\\| |/o\\| java.awt.Point |/p\\| int "+getX()+" int "+getY()+" |/e1\\| |/p\\| String |/l\\| "+Argument.encodeNewLine(contents)+" |/eS\\|";
+		if (inWorld) {
+			return "String |/l\\| "+name+" |/eS\\| |/o\\| java.awt.Point |/p\\| int "+getX()+" int "+getY()+" |/e1\\| |/p\\| String |/l\\| "+Argument.encodeNewLine(contents)+" |/eS\\|";
+		} else {
+			return "String |/l\\| "+name+" |/eS\\| String |/l\\| "+Argument.encodeNewLine(contents)+" |/eS\\|";
+		}
 	}
 }

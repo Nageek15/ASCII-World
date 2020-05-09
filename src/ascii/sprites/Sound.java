@@ -20,7 +20,7 @@ public class Sound extends Sprite{
 		visible=false;
 		this.sound=sound;
 		this.amplitude=amplitude;
-		fileName="lelelele.wav";
+		fileName="zap.wav";
 		startingAmplitude=amplitude;
 		this.velocity=velocity;
 	}
@@ -42,9 +42,14 @@ public class Sound extends Sprite{
 		newPos.move(velocity);
 		
 		if (App.map.solidAt(newPos.toPoint())) {
-			velocity.$X$(-1);//reflect
+			velocity=velocity.$X$(-1);//reflect
+			newPos.move(velocity);
+			newPos.move(velocity);
+			if (App.p.getPos().equals(pos)) {
+				App.p.hear(this);
+			}
 		} else if (App.p.getPos().equals(newPos.toPoint())) {
-			velocity.$X$(-1);//reflect
+			velocity=velocity.$X$(-1);//reflect
 			App.p.hear(this);
 		}
 		

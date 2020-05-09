@@ -111,21 +111,26 @@ public class Map {
     		for (int column=0;column<camera.getArea().width;column++) {
     			if (spritesToDraw.containsKey(new Point(column,row))) {
     				Sprite s=spritesToDraw.get(new Point(column,row));
-    				Console.s.print(s.getChar());
+    				Console.s.print(":"+s.getChar());
     				if (s.useSpace()) {
     					Console.s.print(" |");
     				}
     			}else {
-    				Console.s.print("░");
+    				Console.s.print(":░");
     			}
     		}
+    		Console.s.print(":");
     		Console.s.print(facing);
     		Console.s.print(facing);
     		Console.s.print(facing);
     		Console.s.println("");
     		
     	}
-    	Console.s.println("Crystals Used: "+Crystal.crystalsUsed()+"/"+currentLevel.crystalsToWin());
+    	if (App.getState()==App.GAME_STATE.edit) {
+    		Console.s.println("Crystal Goal: "+currentLevel.crystalsToWin());
+    	} else {
+    		Console.s.println("Crystals Used: "+Crystal.crystalsUsed()+"/"+levels.get(App.p.getHighestLevel()).crystalsToWin());
+    	}
     }
     
     public void drawMapFP(Console c) {
@@ -149,7 +154,11 @@ public class Map {
     			c.println("");
     		}
     	}
-    	Console.s.println("Crystals Used: "+Crystal.crystalsUsed()+"/"+currentLevel.crystalsToWin());
+    	if (App.getState()==App.GAME_STATE.edit) {
+    		Console.s.println("Crystal Goal: "+currentLevel.crystalsToWin());
+    	} else {
+    		Console.s.println("Crystals Used: "+Crystal.crystalsUsed()+"/"+levels.get(App.p.getHighestLevel()).crystalsToWin());
+    	}
     }
 
     /**Set the level by number

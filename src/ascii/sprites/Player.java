@@ -12,17 +12,22 @@ public class Player extends Sprite{
 	private Inventory i;
 	private int jump=0;
 	private int maxJump=3;
+	private int atk;
 	private int jumpHorizontalVelocity=0;
 	private boolean jumping=false;
 	private RayCastor r;
 	private double lowestAudibleVolume=.1;
+	private int letters;
+	private int highestLevel=0;
 	
 	/**For new game
 	 * 
 	 * @param name
 	 */
-	public Player(String name) {
-		super(name,'@',new Point(0,5),10);
+	public Player(String name,int hp) {
+		super(name,'@',new Point(0,5),hp);
+		atk=1;
+		letters=0;
 		i=new Inventory(this);
 		i.add(new Scroll("Scroll of Grabbing","This is a command scroll. They will tell you a list of things that you can type and what it will do.\n*note that \" \" are used for arguments (<argument>) that have spaces in them\n\nCommands:\ngrab - grab something"));
 		i.add(new Scroll("Scroll of Walking", "walk <left/right> - walk left or walk right\n  ex: walk right"));
@@ -40,15 +45,20 @@ public class Player extends Sprite{
 	 * @param jumpHorizontalVelocity
 	 * @param jumping
 	 */
-	public Player(String name, Point pos, int hp,int mhp,int jump,int maxJump,int jumpHorizontalVelocity,boolean jumping) {
+	public Player(String name, Point pos, int hp,int mhp,int jump,int maxJump,int jumpHorizontalVelocity,boolean jumping,double lowestAudibleVolume,int atk,int letters,int highestLevel) {
 		super(name,'@',pos,mhp);
 		this.hp=hp;//set hp
 		this.jump=jump;
 		this.maxJump=maxJump;
 		this.jumpHorizontalVelocity=jumpHorizontalVelocity;
 		this.jumping=jumping;
+		this.atk=atk;
+		this.lowestAudibleVolume=lowestAudibleVolume;
+		this.letters=letters;
+		this.highestLevel=highestLevel;
 		i=new Inventory(this);
 		r=new RayCastor(31);
+		
 	}
 	
 	
@@ -76,6 +86,11 @@ public class Player extends Sprite{
 	
 	@Override
 	public void update() {
+		if (App.map.spriteAt(pos,'3')) {
+			App.setFP(false);
+		} else if (App.map.spriteAt(pos,'1')) {
+			App.setFP(true);
+		}
 		if (jumping==true) {
 			jump--;
 			attemptMove(new Point(getX()+jumpHorizontalVelocity,getY()+1));
@@ -94,6 +109,11 @@ public class Player extends Sprite{
 		}
 		if (hp<=0) {
 			inWorld=false;
+		}
+		if (App.map.spriteAt(pos,'3')) {
+			App.setFP(false);
+		} else if (App.map.spriteAt(pos,'1')) {
+			App.setFP(true);
 		}
 	}
 	
@@ -131,8 +151,22 @@ public class Player extends Sprite{
 		return hp;
 	}
 	
+	public void setHealth(int hp) {
+		if (hp>maxhp) {
+			hp=maxhp;
+		}
+		this.hp=hp;
+	}
+	
 	public int getMaxHealth() {
 		return maxhp;
+	}
+	
+	public void setMaxHealth(int mhp) {
+		maxhp=mhp;
+		if (hp>mhp) {
+			hp=mhp;
+		}
 	}
 	
 	public int getJump() {
@@ -141,6 +175,34 @@ public class Player extends Sprite{
 	
 	public int getMaxJump() {
 		return maxJump;
+	}
+	
+	public void setMaxJump(int amount) {
+		maxJump=amount;
+	}
+	
+	public double getLowestAudibleVolume() {
+		return lowestAudibleVolume;
+	}
+	
+	public void setLowestAudibleVolume(double d) {
+		lowestAudibleVolume=d;
+	}
+	
+	public int getAtk() {
+		return atk;
+	}
+	
+	public void setAtk(int atk) {
+		this.atk=atk;
+	}
+	
+	public int getLetters() {
+		return letters;
+	}
+	
+	public void setLetters(int letters) {
+		this.letters=letters;
 	}
 	
 	public int getJumpHorizontalVelocity() {
@@ -169,6 +231,8 @@ public class Player extends Sprite{
 		}
 	}
 	
+	
+	
 	public void yell() {
 		Sound s=null;
 		try {
@@ -179,6 +243,16 @@ public class Player extends Sprite{
 		}
 		App.map.getCurrentLevel().add(s);
 		s.play();
+	}
+	
+	public void setHighestLevel(int l) {
+		if (l>highestLevel) {
+			highestLevel=l;
+		}
+	}
+	
+	public int getHighestLevel() {
+		return highestLevel;
 	}
 	
 }

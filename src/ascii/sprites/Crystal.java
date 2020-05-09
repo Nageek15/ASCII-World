@@ -8,6 +8,7 @@ public class Crystal extends Item{
 	public Crystal(Point pos) {
 		super('§',pos,"It glows a purple color.",true,true);
 		space=true;
+		worth=500;
 	}
 	
 	/**For instantiating in inventory
@@ -15,6 +16,7 @@ public class Crystal extends Item{
 	 */
 	public Crystal() {
 		super('§',new Point(0,0),"It glows a purple color.",true,false);
+		worth=500;
 	}
 	
 	public void use() {

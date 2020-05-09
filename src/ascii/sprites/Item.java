@@ -8,6 +8,7 @@ public class Item extends Sprite{
 	protected boolean useable;
 	protected String desc;
 	protected boolean consumable=true;
+	protected int worth=1;
 	
 	public Item() {
 		super('*',new Point(0,0),false);
@@ -72,6 +73,10 @@ public class Item extends Sprite{
 	
 	public void use() {
 		Console.s.println("Nothing happens.");
+	}
+	
+	public int getWorth() {
+		return worth;
 	}
 	
 	@Override

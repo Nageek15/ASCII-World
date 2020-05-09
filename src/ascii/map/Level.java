@@ -1,7 +1,7 @@
 package ascii.map;
 
-import ascii.sprites.Block;
-import ascii.sprites.Sprite;
+import ascii.App;
+import ascii.sprites.*;
 import gameutil.text.*;
 import gameutil.text.Console;
 
@@ -62,8 +62,20 @@ public class Level {
         writer.write(String.valueOf(crystalsNeeded));//save crystals needed
         writer.newLine();
         for (Sprite s : sprites){ //save sprites
-            writer.write("S "+s.getClass().getName()+" "+s.getProps());
-            writer.newLine();
+        	if (s.getName().equals("Shop")&&App.getState()!=App.GAME_STATE.edit) {
+        		writer.write("S I "+s.getClass().getName()+" "+s.getProps());
+        		writer.newLine();
+        		Inventory inv=((Shop) s).getInventory();
+        		for (Item i:inv.getItems()) {
+        			writer.write("I "+i.getClass().getName()+" "+i.getProps());
+    				writer.newLine();
+    			}
+    			writer.write("|i|");
+    			writer.newLine();
+        	} else {
+        		writer.write("S "+s.getClass().getName()+" "+s.getProps());
+        		writer.newLine();
+        	}
         }
         writer.write("||");
         writer.close();
@@ -104,8 +116,24 @@ public class Level {
                 read = reader.readLine();
                 Argument args=Argument.getArgs(read);
                 if (args.cmd().equals("S")){
-                    args=Argument.getArgs(read.substring(2));
-                    level.sprites.add((Sprite) Argument.constructFromArgs(args));
+                	if (args.get(1).equals("I")){
+                		args=Argument.getArgs(read.substring(4));
+                		Sprite s=(Sprite) Argument.constructFromArgs(args);
+                    	level.sprites.add(s);
+                    	while (!read.equals("|i|")) {
+			                read = reader.readLine();
+			                args=Argument.getArgs(read);
+			                if (args.cmd().equals("I")){
+			                    args=Argument.getArgs(read.substring(2));
+			                    ((Shop) s).getInventory().add((Item) Argument.constructFromArgs(args));
+			                }
+			                line++;
+			            }
+                	} else {
+                		args=Argument.getArgs(read.substring(2));
+                    	level.sprites.add((Sprite) Argument.constructFromArgs(args));
+                	}
+                    
                 }
                 line++;
             }
